@@ -1,0 +1,61 @@
+.toast {
+  position: fixed;
+  top: 88px;
+  right: var(--esp-6);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  max-width: calc(100vw - 32px);
+  padding: 14px var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-left: 4px solid currentColor;
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta-hover);
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  animation: entrar 0.2s ease-out;
+}
+
+.toast span {
+  color: var(--color-texto);
+}
+
+.exito {
+  color: var(--color-exito);
+  background: var(--color-exito-fondo);
+}
+.error {
+  color: var(--color-error);
+}
+.info {
+  color: var(--color-info);
+}
+.advertencia {
+  color: var(--color-advertencia);
+}
+
+.cerrar {
+  display: flex;
+  margin-left: var(--esp-2);
+  padding: 2px;
+  border: 0;
+  background: none;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 640px) {
+  .toast {
+    right: var(--esp-4);
+    left: var(--esp-4);
+  }
+}

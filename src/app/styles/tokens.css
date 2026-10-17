@@ -1,0 +1,60 @@
+/* Sistema de diseño de PROTOTIPO_WEB.md §1 */
+:root {
+  /* Paleta */
+  --color-primario: #1e3a8a;
+  --color-primario-hover: #1e40af;
+  --color-primario-suave: #dbeafe;
+  --color-acento: #f59e0b;
+  --color-acento-hover: #d97706;
+  --color-acento-suave: #fef3c7;
+  --color-fondo: #f8fafc;
+  --color-superficie: #ffffff;
+  --color-borde: #e2e8f0;
+  --color-texto: #0f172a;
+  --color-texto-secundario: #475569;
+  --color-deshabilitado: #94a3b8;
+  --color-admin-barra: #0f172a;
+  --color-admin-texto: #e2e8f0;
+
+  /* Estados: texto / fondo */
+  --color-exito: #15803d;
+  --color-exito-fondo: #dcfce7;
+  --color-advertencia: #b45309;
+  --color-advertencia-fondo: #fef3c7;
+  --color-error: #b91c1c;
+  --color-error-fondo: #fee2e2;
+  --color-info: #0369a1;
+  --color-info-fondo: #e0f2fe;
+
+  /* Tipografía */
+  --fuente: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fuente-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --texto-titulo-pagina: 28px;
+  --texto-titulo-seccion: 20px;
+  --texto-normal: 16px;
+  --texto-pequeno: 14px;
+  --texto-insignia: 12px;
+
+  /* Espacio (múltiplos de 4) */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-6: 24px;
+  --esp-8: 32px;
+  --esp-12: 48px;
+
+  /* Formas */
+  --radio-control: 8px;
+  --radio-tarjeta: 12px;
+  --radio-pildora: 999px;
+  --alto-control: 44px;
+
+  /* Sombras */
+  --sombra-tarjeta: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --sombra-tarjeta-hover: 0 4px 12px rgba(15, 23, 42, 0.12);
+  --sombra-modal: 0 20px 40px rgba(15, 23, 42, 0.2);
+
+  /* Layout */
+  --ancho-tienda: 1200px;
+}

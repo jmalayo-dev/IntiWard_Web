@@ -1,0 +1,47 @@
+.detalle {
+  display: grid;
+  gap: var(--esp-8);
+}
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--esp-4);
+  margin-top: calc(-1 * var(--esp-4));
+}
+
+.tituloFila {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}
+
+.titulo {
+  font-size: var(--texto-titulo-pagina);
+  font-weight: 700;
+}
+
+.fecha {
+  margin-top: var(--esp-1);
+  color: var(--color-texto-secundario);
+}
+
+.columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  gap: var(--esp-8);
+  align-items: start;
+}
+
+.unaColumna {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 960px) {
+  .columnas {
+    grid-template-columns: 1fr;
+  }
+}

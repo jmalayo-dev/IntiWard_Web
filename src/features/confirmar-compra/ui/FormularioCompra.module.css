@@ -1,0 +1,169 @@
+.columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: var(--esp-8);
+  align-items: start;
+}
+
+.tarjeta {
+  padding: var(--esp-8);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.fieldset {
+  display: grid;
+  gap: var(--esp-6);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.titulo {
+  margin-bottom: var(--esp-6);
+  padding: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.opciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--esp-4);
+}
+
+.opcion {
+  position: relative;
+  display: grid;
+  gap: var(--esp-3);
+  align-content: start;
+  min-height: 120px;
+  padding: var(--esp-6) var(--esp-6) var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.opcion:hover {
+  border-color: #93c5fd;
+}
+
+.elegida {
+  border: 2px solid var(--color-primario);
+  background: var(--color-primario-suave);
+  padding: calc(var(--esp-6) - 1px) calc(var(--esp-6) - 1px) calc(var(--esp-4) - 1px);
+}
+
+.radio {
+  position: absolute;
+  top: var(--esp-6);
+  right: var(--esp-6);
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--color-primario);
+}
+
+.opcionTitulo {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.opcionTexto {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.campoCorto {
+  max-width: 320px;
+}
+
+.factura {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--esp-4);
+}
+
+.contacto {
+  margin-top: var(--esp-8);
+  padding-top: var(--esp-6);
+  border-top: 1px solid var(--color-borde);
+}
+
+.contactoCabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--esp-4);
+}
+
+.subtitulo {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.enlace {
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+}
+
+.enlace:hover {
+  text-decoration: underline;
+}
+
+.datos {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-fondo);
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.datos strong {
+  color: var(--color-texto);
+}
+
+.confirmar {
+  display: grid;
+  gap: var(--esp-3);
+}
+
+.nota {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  font-size: 12px;
+  color: var(--color-texto-secundario);
+  text-align: center;
+}
+
+.nota svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 960px) {
+  .columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .tarjeta {
+    padding: var(--esp-6) var(--esp-4);
+  }
+  .opciones,
+  .factura {
+    grid-template-columns: 1fr;
+  }
+}

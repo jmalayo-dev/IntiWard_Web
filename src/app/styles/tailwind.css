@@ -1,0 +1,28 @@
+/*
+ * Tailwind CSS v4. Convive con los CSS Modules del proyecto:
+ * - Sin Preflight (el reset de Tailwind): el reset es global.css y así las vistas existentes no cambian.
+ * - Todo va en capas (@layer); los CSS Modules no tienen capa, así que si chocan, gana el CSS Module.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* La app no tiene modo oscuro: las variantes dark: solo aplican dentro de .dark (convención de shadcn) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Animación de AuroraBackground (Aceternity UI) */
+@theme inline {
+  --animate-aurora: aurora 60s linear infinite;
+  @keyframes aurora {
+    from {
+      background-position:
+        50% 50%,
+        50% 50%;
+    }
+    to {
+      background-position:
+        350% 50%,
+        350% 50%;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+.pista {
+  height: 6px;
+  margin-top: 2px;
+  border-radius: var(--radio-pildora);
+  background: var(--color-borde);
+  overflow: hidden;
+}
+
+.relleno {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+/* Un color por nivel: de rojo (25 %) a amarillo brillante (100 %) */
+.nivel1 {
+  background: #ef4444;
+}
+
+.nivel2 {
+  background: #f97316;
+}
+
+.nivel3 {
+  background: #f59e0b;
+}
+
+.nivel4 {
+  background: #facc15;
+}

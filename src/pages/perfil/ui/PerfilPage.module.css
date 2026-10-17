@@ -1,0 +1,70 @@
+.columnas {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--esp-8);
+  align-items: start;
+}
+
+.identidad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-2);
+  text-align: center;
+}
+
+.cambiarFoto {
+  margin-bottom: var(--esp-3);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primario);
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.cambiarFoto:hover {
+  text-decoration: underline;
+}
+
+.nombre {
+  font-size: var(--texto-titulo-seccion);
+  font-weight: 700;
+}
+
+.correo {
+  margin-bottom: var(--esp-2);
+  color: var(--color-texto-secundario);
+  word-break: break-all;
+}
+
+.miembro {
+  margin-top: var(--esp-2);
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+.derecha {
+  display: grid;
+  gap: var(--esp-6);
+}
+
+.seguridad {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--esp-4);
+}
+
+.gris {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+@media (max-width: 860px) {
+  .columnas {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,33 @@
+.buscador {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.icono {
+  position: absolute;
+  left: 14px;
+  color: var(--color-texto-secundario);
+  pointer-events: none;
+}
+
+.entrada {
+  width: 100%;
+  height: var(--alto-control);
+  padding: 0 14px 0 44px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  font-size: var(--texto-pequeno);
+}
+
+.entrada::placeholder {
+  color: var(--color-texto-secundario);
+}
+
+.entrada:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 1px var(--color-primario);
+}

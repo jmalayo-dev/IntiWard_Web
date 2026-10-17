@@ -1,0 +1,20 @@
+.acciones {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-4);
+}
+
+.lapiz {
+  display: flex;
+  padding: 6px;
+  border: 0;
+  border-radius: var(--radio-control);
+  background: none;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+}
+
+.lapiz:hover {
+  color: var(--color-primario);
+  background: var(--color-primario-suave);
+}

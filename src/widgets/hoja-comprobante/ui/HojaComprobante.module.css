@@ -1,0 +1,247 @@
+.hoja {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 794px;
+  min-height: 1123px;
+  margin: 0 auto;
+  padding: 40px;
+  background: #ffffff;
+  color: var(--color-texto);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+  font-size: 14px;
+}
+
+.compacta {
+  min-height: 0;
+  padding: 24px;
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde);
+  font-size: 12px;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-6);
+  padding-bottom: var(--esp-8);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.emisor {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+}
+
+.emisor > strong {
+  margin-top: var(--esp-4);
+  font-size: 15px;
+}
+
+.compacta .emisor > strong {
+  font-size: 13px;
+  margin-top: var(--esp-2);
+}
+
+.emisor > span:not(:first-child) {
+  font-size: 12px;
+  color: var(--color-texto-secundario);
+}
+
+.recuadro {
+  display: grid;
+  gap: var(--esp-2);
+  align-content: center;
+  justify-items: center;
+  align-self: flex-start;
+  padding: var(--esp-4) var(--esp-6);
+  border: 2px solid var(--color-primario);
+  border-radius: var(--radio-control);
+  text-align: center;
+}
+
+.tipo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primario);
+}
+
+.numero {
+  font-family: var(--fuente-mono);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.compacta .tipo {
+  font-size: 11px;
+}
+
+.compacta .numero {
+  font-size: 15px;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--esp-3) var(--esp-8);
+  margin: 0;
+  padding: var(--esp-6) 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.datos div {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+}
+
+.compacta .datos div {
+  grid-template-columns: 1fr;
+}
+
+.datos dt {
+  color: var(--color-texto-secundario);
+}
+
+.datos dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.detalle {
+  width: 100%;
+  margin-top: var(--esp-6);
+  border-collapse: collapse;
+}
+
+.detalle th {
+  padding: var(--esp-3) var(--esp-4);
+  background: #eff6ff;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.detalle td {
+  padding: var(--esp-4);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.compacta .detalle th,
+.compacta .detalle td {
+  padding: var(--esp-2);
+}
+
+.centro {
+  text-align: center !important;
+}
+
+.derecha {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.mono {
+  font-family: var(--fuente-mono);
+  font-weight: 600;
+}
+
+.gris {
+  color: var(--color-texto-secundario);
+}
+
+.totales {
+  display: grid;
+  gap: var(--esp-2);
+  width: 290px;
+  margin: var(--esp-6) 0 0 auto;
+}
+
+.totales div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.totales dt {
+  color: var(--color-texto-secundario);
+}
+
+.totales dd {
+  margin: 0;
+  font-family: var(--fuente-mono);
+  font-weight: 600;
+}
+
+.importeTotal {
+  margin-top: var(--esp-1);
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--color-borde);
+}
+
+.importeTotal dt {
+  color: var(--color-texto) !important;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.importeTotal dd {
+  color: var(--color-primario);
+  font-size: 18px;
+}
+
+.letras {
+  margin-top: var(--esp-6);
+  padding: var(--esp-3) var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-fondo);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-texto-secundario);
+}
+
+.pie {
+  margin-top: auto;
+  padding-top: var(--esp-12);
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  font-size: 12px;
+  color: var(--color-texto-secundario);
+  text-align: center;
+}
+
+.pie strong {
+  color: var(--color-primario);
+}
+
+.compacta .pie {
+  padding-top: var(--esp-8);
+}
+
+@media (max-width: 640px) {
+  .hoja {
+    min-height: 0;
+    padding: 20px;
+  }
+  .cabecera {
+    flex-direction: column;
+  }
+  .datos {
+    grid-template-columns: 1fr;
+  }
+  .totales {
+    width: 100%;
+  }
+}
+
+@media print {
+  .hoja {
+    max-width: none;
+    min-height: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+}

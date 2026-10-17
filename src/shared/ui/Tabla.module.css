@@ -1,0 +1,78 @@
+.contenedor {
+  overflow-x: auto;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-pequeno);
+}
+
+.tabla th {
+  background: var(--color-fondo);
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-insignia);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: var(--esp-3) var(--esp-4);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.tabla td {
+  height: 56px;
+  padding: 0 var(--esp-4);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.tabla tr:last-child td {
+  border-bottom: 0;
+}
+
+.sinBorde {
+  border: 0;
+  border-radius: 0;
+}
+
+.tabla td {
+  padding-top: var(--esp-3);
+  padding-bottom: var(--esp-3);
+}
+
+.tabla th {
+  white-space: nowrap;
+}
+
+.seleccionada td {
+  background: var(--color-primario-suave);
+}
+
+.atenuada td {
+  color: var(--color-deshabilitado);
+}
+
+.clicable {
+  cursor: pointer;
+}
+
+.clicable:hover td {
+  background: var(--color-fondo);
+}
+
+.clicable.seleccionada:hover td {
+  background: var(--color-primario-suave);
+}
+
+.vacio {
+  height: auto !important;
+  padding: 0 !important;
+}
+
+.pie {
+  padding: 0 var(--esp-4);
+  border-top: 1px solid var(--color-borde);
+}

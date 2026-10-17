@@ -1,0 +1,57 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  padding: var(--esp-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+  transition: box-shadow 0.15s, transform 0.15s;
+  min-width: 0;
+}
+
+.tarjeta:hover {
+  box-shadow: var(--sombra-tarjeta-hover);
+}
+
+.enlace {
+  display: block;
+  color: inherit;
+}
+
+.marca {
+  margin-top: var(--esp-4);
+  font-size: var(--texto-insignia);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-secundario);
+}
+
+.nombre {
+  margin: var(--esp-1) 0 0;
+  min-height: 48px;
+  font-size: var(--texto-normal);
+  font-weight: 600;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.enlace:hover .nombre {
+  color: var(--color-primario);
+}
+
+.pie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin-top: var(--esp-3);
+}
+
+.insignia {
+  min-height: 22px;
+  margin-bottom: var(--esp-2);
+}

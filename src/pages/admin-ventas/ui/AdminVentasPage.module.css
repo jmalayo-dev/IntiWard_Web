@@ -1,0 +1,52 @@
+.herramientas {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-6);
+}
+
+.buscador {
+  flex: 1 1 240px;
+  max-width: 300px;
+}
+
+.selector {
+  height: var(--alto-control);
+  min-width: 190px;
+  padding: 0 var(--esp-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  font-size: var(--texto-pequeno);
+}
+
+.pedido {
+  font-weight: 700;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.cliente {
+  display: grid;
+  min-width: 180px;
+}
+
+.cliente strong {
+  font-weight: 500;
+}
+
+.cliente span {
+  font-size: 12px;
+  color: var(--color-texto-secundario);
+}
+
+.ver {
+  font-weight: 600;
+}
+
+.ver:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,29 @@
+.migas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.item + .item::before {
+  content: '/';
+  margin: 0 var(--esp-2);
+  color: var(--color-deshabilitado);
+}
+
+.enlace {
+  color: var(--color-texto-secundario);
+}
+
+.enlace:hover {
+  color: var(--color-primario);
+}
+
+.actual {
+  color: var(--color-texto);
+  font-weight: 500;
+}

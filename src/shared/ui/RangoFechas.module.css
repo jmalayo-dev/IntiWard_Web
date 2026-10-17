@@ -1,0 +1,31 @@
+.rango {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  height: var(--alto-control);
+  margin: 0;
+  padding: 0 var(--esp-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  font-size: var(--texto-pequeno);
+  min-width: 0;
+}
+
+.icono {
+  flex-shrink: 0;
+  color: var(--color-texto-secundario);
+}
+
+.fecha {
+  min-width: 0;
+  border: 0;
+  background: none;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+}
+
+.fecha:focus {
+  outline: none;
+  color: var(--color-primario);
+}

@@ -1,0 +1,20 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.inti {
+  color: var(--color-acento);
+}
+
+.guard {
+  color: var(--color-primario);
+}
+
+.claro .guard {
+  color: #ffffff;
+}

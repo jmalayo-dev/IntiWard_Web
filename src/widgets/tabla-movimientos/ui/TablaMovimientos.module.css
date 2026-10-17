@@ -1,0 +1,64 @@
+.contenedor {
+  display: grid;
+  gap: var(--esp-6);
+}
+
+.herramientas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.selector {
+  height: var(--alto-control);
+  min-width: 180px;
+  padding: 0 var(--esp-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  font-size: var(--texto-pequeno);
+}
+
+.exportar {
+  margin-left: auto;
+}
+
+.gris {
+  color: var(--color-texto-secundario);
+  white-space: nowrap;
+}
+
+.producto {
+  font-weight: 600;
+}
+
+.positivo {
+  color: var(--color-exito);
+  font-weight: 700;
+}
+
+.negativo {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+.enlace {
+  font-weight: 600;
+}
+
+.enlace:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .selector,
+  .exportar {
+    flex: 1 1 100%;
+    margin-left: 0;
+  }
+}

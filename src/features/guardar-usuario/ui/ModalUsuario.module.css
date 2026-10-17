@@ -1,0 +1,31 @@
+.formulario {
+  display: grid;
+  gap: var(--esp-4);
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--esp-3);
+}
+
+.clave {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+}
+
+.clave > button {
+  margin-top: 26px;
+}
+
+.campoClave {
+  flex: 1;
+  font-family: var(--fuente-mono);
+}
+
+@media (max-width: 480px) {
+  .fila {
+    grid-template-columns: 1fr;
+  }
+}

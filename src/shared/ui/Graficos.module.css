@@ -1,0 +1,135 @@
+.figura {
+  margin: 0;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.eje {
+  stroke: var(--color-borde);
+}
+
+.guia {
+  stroke: var(--color-borde);
+  stroke-dasharray: 4 4;
+}
+
+.textoEje {
+  font-size: 13px;
+  fill: var(--color-texto-secundario);
+}
+
+.fuerte {
+  font-weight: 700;
+  fill: var(--color-texto);
+  color: var(--color-texto);
+}
+
+.barra {
+  fill: var(--color-primario);
+  transition: opacity 0.15s;
+}
+
+.puntoAcento {
+  fill: var(--color-acento);
+}
+
+.globo {
+  fill: var(--color-texto);
+}
+
+.textoGlobo {
+  font-size: 13px;
+  font-weight: 600;
+  fill: #ffffff;
+}
+
+.linea {
+  fill: none;
+  stroke: var(--color-primario);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.lineaGris {
+  fill: none;
+  stroke: var(--color-deshabilitado);
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+}
+
+.puntoLinea {
+  fill: var(--color-primario);
+}
+
+.dona {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-8);
+  flex-wrap: wrap;
+}
+
+.svgDona {
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.leyenda {
+  display: grid;
+  gap: var(--esp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+}
+
+.leyenda li {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.muestra {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.progreso {
+  display: grid;
+  gap: 6px;
+}
+
+.progresoCabecera {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  font-size: 13px;
+  color: var(--color-texto);
+}
+
+.pista {
+  height: 10px;
+  border-radius: var(--radio-pildora);
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.relleno {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.primario {
+  background: var(--color-primario);
+}
+
+.gris {
+  background: #64748b;
+}

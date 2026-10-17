@@ -1,0 +1,82 @@
+.opcion {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  color: var(--color-texto-secundario);
+  white-space: nowrap;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.opcion:hover {
+  color: var(--color-texto);
+}
+
+/* Subrayadas */
+.linea {
+  display: flex;
+  gap: var(--esp-8);
+  border-bottom: 1px solid var(--color-borde);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.linea .opcion {
+  padding: var(--esp-3) 0;
+  font-size: var(--texto-normal);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.linea .activa {
+  color: var(--color-primario);
+  font-weight: 600;
+  border-bottom-color: var(--color-primario);
+}
+
+/* Píldoras */
+.pildora {
+  display: flex;
+  gap: var(--esp-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.pildora .opcion {
+  height: 36px;
+  padding: 0 var(--esp-4);
+  border-radius: var(--radio-control);
+  font-size: var(--texto-normal);
+}
+
+.pildora .activa {
+  background: var(--color-primario);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Segmentos */
+.segmentos {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.segmentos .opcion {
+  height: 34px;
+  padding: 0 var(--esp-4);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.segmentos .activa {
+  background: var(--color-primario);
+  color: #ffffff;
+  font-weight: 600;
+}

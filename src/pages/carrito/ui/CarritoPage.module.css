@@ -1,0 +1,137 @@
+.columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--esp-8);
+  align-items: start;
+}
+
+.lista {
+  margin: 0;
+  padding: 0 var(--esp-6);
+  list-style: none;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.linea {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) auto 110px auto;
+  align-items: center;
+  gap: var(--esp-6);
+  padding: var(--esp-6) 0;
+}
+
+.linea + .linea {
+  border-top: 1px solid var(--color-borde);
+}
+
+.miniatura {
+  display: block;
+}
+
+.datos {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nombre {
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.nombre:hover {
+  color: var(--color-primario);
+}
+
+.gris {
+  font-size: 15px;
+  color: var(--color-texto-secundario);
+}
+
+.cantidad {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.aviso {
+  font-size: 12px;
+  color: var(--color-advertencia);
+  font-weight: 600;
+}
+
+.importe {
+  font-size: 18px;
+  text-align: right;
+}
+
+.agotado {
+  grid-column: 3 / 5;
+  display: grid;
+  justify-items: end;
+  gap: var(--esp-2);
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  color: var(--color-error);
+}
+
+.seguir {
+  display: inline-block;
+  margin-top: var(--esp-6);
+  font-weight: 600;
+}
+
+.seguir:hover {
+  text-decoration: underline;
+}
+
+.vacio {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+}
+
+.botonEnlace {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 var(--esp-6);
+  border-radius: var(--radio-control);
+  background: var(--color-primario);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .lista {
+    padding: 0 var(--esp-4);
+  }
+  .linea {
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    gap: var(--esp-3) var(--esp-4);
+  }
+  .miniatura > div {
+    width: 64px !important;
+    height: 64px !important;
+  }
+  .cantidad {
+    grid-column: 2;
+    justify-items: start;
+  }
+  .importe {
+    grid-column: 3;
+  }
+  .agotado {
+    grid-column: 2 / 4;
+    justify-items: start;
+  }
+}

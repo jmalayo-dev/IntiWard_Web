@@ -1,0 +1,73 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 640px;
+  margin: var(--esp-8) auto;
+  padding: var(--esp-12) var(--esp-8);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+  text-align: center;
+}
+
+.circulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.exito {
+  width: 90px;
+  height: 90px;
+  background: var(--color-exito);
+  color: #ffffff;
+}
+
+.advertencia {
+  background: var(--color-advertencia-fondo);
+  color: var(--color-advertencia);
+}
+
+.error {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+
+.titulo {
+  margin-top: var(--esp-6);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contenido {
+  width: 100%;
+  margin-top: var(--esp-3);
+  color: var(--color-texto-secundario);
+}
+
+.contenido strong {
+  color: var(--color-texto);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--esp-4);
+  margin-top: var(--esp-8);
+}
+
+@media (max-width: 560px) {
+  .tarjeta {
+    padding: var(--esp-8) var(--esp-4);
+  }
+  .titulo {
+    font-size: 24px;
+  }
+}

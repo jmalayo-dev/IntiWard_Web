@@ -1,0 +1,52 @@
+.lista {
+  display: grid;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+
+.requisito {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-2);
+  color: var(--color-texto-secundario);
+  transition: color 0.15s;
+}
+
+/* Círculo vacío mientras falta; con check cuando se cumple */
+.marca {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border: 1.5px solid var(--color-deshabilitado);
+  border-radius: 50%;
+}
+
+.obligatorio {
+  color: var(--color-texto-secundario);
+  font-weight: 500;
+}
+
+.cumplido {
+  color: var(--color-deshabilitado);
+}
+
+.cumplido .texto {
+  text-decoration: line-through;
+}
+
+.cumplido .marca {
+  border-color: var(--color-deshabilitado);
+  background: var(--color-deshabilitado);
+  color: #ffffff;
+}
+
+.cumplido .obligatorio {
+  color: inherit;
+}

@@ -1,0 +1,84 @@
+.formulario {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logoMovil {
+  display: none;
+  margin-bottom: var(--esp-8);
+}
+
+.titulo {
+  font-size: var(--texto-titulo-pagina);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-texto);
+}
+
+.subtitulo {
+  margin-top: 6px;
+  margin-bottom: var(--esp-6);
+  color: var(--color-texto-secundario);
+}
+
+.aviso {
+  margin-bottom: var(--esp-6);
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.terminos {
+  padding-top: var(--esp-1);
+}
+
+.enviar {
+  padding-top: var(--esp-2);
+}
+
+.pie {
+  margin-top: var(--esp-6);
+  text-align: center;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.enlace {
+  margin-left: var(--esp-1);
+  font-weight: 600;
+  color: var(--color-primario);
+}
+
+.enlace:hover,
+.enlaceError:hover {
+  text-decoration: underline;
+}
+
+.enlaceError {
+  color: inherit;
+  font-weight: 600;
+}
+
+@media (max-width: 899px) {
+  .logoMovil {
+    display: block;
+  }
+}
+
+@media (max-width: 479px) {
+  .fila {
+    grid-template-columns: 1fr;
+  }
+}

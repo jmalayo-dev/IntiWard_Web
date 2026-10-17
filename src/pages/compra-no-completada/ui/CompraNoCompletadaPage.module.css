@@ -1,0 +1,32 @@
+.texto {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.botonPrimario,
+.botonSecundario {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 var(--esp-6);
+  border-radius: var(--radio-control);
+  font-weight: 600;
+}
+
+.botonPrimario {
+  background: var(--color-primario);
+  color: #ffffff;
+}
+
+.botonPrimario:hover {
+  background: var(--color-primario-hover);
+}
+
+.botonSecundario {
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+}
+
+.botonSecundario:hover {
+  background: var(--color-fondo);
+}

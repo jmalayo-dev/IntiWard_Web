@@ -1,0 +1,36 @@
+.marco {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contenido {
+  flex: 1;
+  width: 100%;
+  max-width: var(--ancho-tienda);
+  margin: 0 auto;
+  padding: var(--esp-8) var(--esp-4) var(--esp-12);
+}
+
+.barraSimple {
+  background: var(--color-primario);
+  color: #ffffff;
+}
+
+.barraSimpleContenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--ancho-tienda);
+  height: 72px;
+  margin: 0 auto;
+  padding: 0 var(--esp-4);
+}
+
+.compraSegura {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: 15px;
+  font-weight: 600;
+}

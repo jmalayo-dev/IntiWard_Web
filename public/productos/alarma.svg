@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+                <!-- Alarma Wi-Fi blanca con altavoz central -->
+                <circle cx="80" cy="80" r="42" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+                <circle cx="80" cy="80" r="28" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+                <!-- Rejilla estroboscópica y sirena -->
+                <circle cx="80" cy="80" r="14" fill="#0F172A"/>
+                <circle cx="80" cy="80" r="6" fill="#EF4444"/>
+                <path d="M80 44V48M80 112V116M44 80H48M112 80H116" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
+              </svg>

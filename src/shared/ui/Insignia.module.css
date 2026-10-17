@@ -1,0 +1,44 @@
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: 2px 10px;
+  border-radius: var(--radio-pildora);
+  font-size: var(--texto-insignia);
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.exito {
+  background: var(--color-exito-fondo);
+  color: var(--color-exito);
+}
+.advertencia {
+  background: var(--color-advertencia-fondo);
+  color: var(--color-advertencia);
+}
+.error {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+.info {
+  background: var(--color-info-fondo);
+  color: var(--color-info);
+}
+.neutro {
+  background: var(--color-fondo);
+  color: var(--color-texto-secundario);
+  border: 1px solid var(--color-borde);
+}
+.morado {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.punto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}

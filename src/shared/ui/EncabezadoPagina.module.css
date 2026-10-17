@@ -1,0 +1,30 @@
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--esp-4);
+  margin-bottom: var(--esp-6);
+}
+
+.textos {
+  min-width: 0;
+}
+
+.titulo {
+  font-size: var(--texto-titulo-pagina);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.subtitulo {
+  margin-top: var(--esp-1);
+  color: var(--color-texto-secundario);
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <!-- Detector de humo fotoeléctrico de techo -->
+  <ellipse cx="80" cy="132" rx="42" ry="6" fill="#0F172A" fill-opacity="0.1"/>
+  <circle cx="80" cy="80" r="44" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="80" cy="80" r="34" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+  <path d="M58 70h44M54 80h52M58 90h44" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="80" cy="80" r="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+  <circle cx="104" cy="58" r="3.5" fill="#EF4444"/>
+</svg>

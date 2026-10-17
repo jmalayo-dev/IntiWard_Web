@@ -1,0 +1,47 @@
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: var(--esp-12) var(--esp-4);
+  text-align: center;
+}
+
+.codigo {
+  margin-top: var(--esp-4);
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-primario-suave);
+  -webkit-text-stroke: 2px var(--color-primario);
+}
+
+.titulo {
+  margin-top: var(--esp-4);
+  font-size: var(--texto-titulo-pagina);
+  font-weight: 700;
+}
+
+.texto {
+  margin-top: var(--esp-3);
+  color: var(--color-texto-secundario);
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  margin-top: var(--esp-8);
+  padding: 0 var(--esp-8);
+  border: 0;
+  border-radius: var(--radio-control);
+  background: var(--color-primario);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boton:hover {
+  background: var(--color-primario-hover);
+}

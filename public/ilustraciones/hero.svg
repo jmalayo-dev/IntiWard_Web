@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 340" fill="none">
+            <!-- Sombra de piso -->
+            <ellipse cx="230" cy="310" rx="190" ry="16" fill="#1E3A8A" fill-opacity="0.12"/>
+            
+            <!-- Cerradura Digital Negra (Izquierda/Centro) -->
+            <g id="smart-lock">
+              <!-- Sombra cerradura -->
+              <ellipse cx="145" cy="305" rx="55" ry="10" fill="#0F172A" fill-opacity="0.2"/>
+              <!-- Cuerpo principal de la cerradura -->
+              <rect x="95" y="70" width="100" height="230" rx="20" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+              <rect x="105" y="80" width="80" height="110" rx="10" fill="#1E293B"/>
+              <!-- Panel táctil de dígitos -->
+              <circle cx="125" cy="100" r="4.5" fill="#94A3B8"/>
+              <circle cx="145" cy="100" r="4.5" fill="#94A3B8"/>
+              <circle cx="165" cy="100" r="4.5" fill="#94A3B8"/>
+              <circle cx="125" cy="120" r="4.5" fill="#94A3B8"/>
+              <circle cx="145" cy="120" r="4.5" fill="#94A3B8"/>
+              <circle cx="165" cy="120" r="4.5" fill="#94A3B8"/>
+              <circle cx="125" cy="140" r="4.5" fill="#94A3B8"/>
+              <circle cx="145" cy="140" r="4.5" fill="#94A3B8"/>
+              <circle cx="165" cy="140" r="4.5" fill="#94A3B8"/>
+              <circle cx="145" cy="160" r="4.5" fill="#94A3B8"/>
+              <!-- Escáner de huella dactilar con aura dorada/azul suave -->
+              <circle cx="145" cy="176" r="8" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+              <circle cx="145" cy="176" r="4" fill="#38BDF8" fill-opacity="0.4"/>
+              <!-- Manija metálica negra con bisel -->
+              <rect x="60" y="210" width="95" height="26" rx="13" fill="#1E293B" stroke="#475569" stroke-width="1.5"/>
+              <rect x="140" y="206" width="30" height="34" rx="6" fill="#334155"/>
+              <!-- Cilindro de llave oculta -->
+              <circle cx="145" cy="265" r="7" fill="#0F172A" stroke="#475569"/>
+            </g>
+
+            <!-- Cámara de Seguridad Blanca (Derecha) -->
+            <g id="security-camera">
+              <!-- Sombra cámara -->
+              <ellipse cx="320" cy="305" rx="75" ry="12" fill="#0F172A" fill-opacity="0.18"/>
+              <!-- Soporte a la base/pared -->
+              <path d="M305 270L305 295" stroke="#94A3B8" stroke-width="14" stroke-linecap="round"/>
+              <ellipse cx="305" cy="296" rx="36" ry="10" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="2"/>
+              <!-- Rótula orientable -->
+              <circle cx="305" cy="255" r="18" fill="#CBD5E1"/>
+              <!-- Brazo articulado -->
+              <path d="M305 255L315 200" stroke="#E2E8F0" stroke-width="18" stroke-linecap="round"/>
+              <!-- Cuerpo blanco de la cámara tipo bala -->
+              <rect x="245" y="125" width="150" height="90" rx="45" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+              <!-- Parasol superior blanco -->
+              <path d="M235 125C235 118 245 110 270 110H385C400 110 405 118 405 125H235Z" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+              <!-- Frontal oscuro de la lente -->
+              <path d="M255 125C240 140 240 180 255 215H240C230 195 230 145 240 125H255Z" fill="#0F172A"/>
+              <!-- Lente de cristal con reflejo cian/azul -->
+              <circle cx="260" cy="170" r="28" fill="#0F172A"/>
+              <circle cx="260" cy="170" r="20" fill="#1E293B" stroke="#0284C7" stroke-width="2"/>
+              <circle cx="260" cy="170" r="11" fill="#0C4A6E"/>
+              <circle cx="256" cy="166" r="3.5" fill="#38BDF8"/>
+              <!-- LED infrarrojo indicador -->
+              <circle cx="260" cy="142" r="3" fill="#EF4444"/>
+              <!-- Antena Wi-Fi posterior blanca -->
+              <path d="M380 135L415 65" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="416" cy="63" r="5" fill="#E2E8F0"/>
+            </g>
+          </svg>

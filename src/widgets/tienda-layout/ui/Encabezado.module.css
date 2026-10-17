@@ -1,0 +1,244 @@
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.barra {
+  background: var(--color-primario);
+  color: #ffffff;
+}
+
+.contenido {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-6);
+  max-width: var(--ancho-tienda);
+  height: 72px;
+  margin: 0 auto;
+  padding: 0 var(--esp-4);
+}
+
+.logo {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.buscador {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.buscadorEscritorio {
+  flex: 1;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.lupa {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  z-index: 1;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+/* El campo es transparente: el fondo de vidrio y el borde brillante los pone GlowCard */
+.buscador input {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0 14px 0 44px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: #ffffff;
+  font-size: var(--texto-pequeno);
+}
+
+.buscador input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.buscador input:focus {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 2px;
+}
+
+/* La "x" nativa del campo de búsqueda, en blanco para que se vea sobre el vidrio */
+.buscador input::-webkit-search-cancel-button {
+  filter: invert(1);
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-6);
+  flex-shrink: 0;
+}
+
+.enlace {
+  position: relative;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.enlace:hover {
+  color: #fde68a;
+}
+
+.activo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-acento);
+}
+
+.botonBorde,
+.botonDorado {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 var(--esp-4);
+  border-radius: var(--radio-control);
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.botonBorde {
+  border: 1px solid #ffffff;
+  color: #ffffff;
+}
+
+.botonBorde:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.botonDorado {
+  background: var(--color-acento);
+  color: var(--color-texto);
+}
+
+.botonDorado:hover {
+  background: var(--color-acento-hover);
+}
+
+.carrito {
+  position: relative;
+  display: flex;
+  color: #ffffff;
+}
+
+.insignia {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+}
+
+.accionesMovil {
+  display: none;
+  align-items: center;
+  gap: var(--esp-4);
+  margin-left: auto;
+}
+
+.hamburguesa {
+  display: flex;
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.panelMovil {
+  display: grid;
+  gap: var(--esp-1);
+  padding: 0 var(--esp-4) var(--esp-4);
+}
+
+.panelMovil .buscador {
+  margin-bottom: var(--esp-2);
+}
+
+.panelMovil a,
+.panelMovil button {
+  padding: 10px 0;
+  border: 0;
+  background: none;
+  color: #ffffff;
+  font-size: var(--texto-normal);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.categorias {
+  background: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.listaCategorias {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-6);
+  max-width: var(--ancho-tienda);
+  margin: 0 auto;
+  padding: 0 var(--esp-4);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.categoria {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  height: 48px;
+  border-bottom: 2px solid transparent;
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.categoria:hover {
+  color: var(--color-primario);
+}
+
+.categoriaActiva {
+  color: var(--color-primario);
+  font-weight: 600;
+  border-bottom-color: var(--color-primario);
+}
+
+@media (max-width: 1080px) {
+  .acciones {
+    gap: var(--esp-4);
+  }
+  .botonBorde,
+  .botonDorado {
+    padding: 0 var(--esp-3);
+  }
+}
+
+@media (max-width: 900px) {
+  .buscadorEscritorio,
+  .acciones {
+    display: none;
+  }
+  .accionesMovil {
+    display: flex;
+  }
+}

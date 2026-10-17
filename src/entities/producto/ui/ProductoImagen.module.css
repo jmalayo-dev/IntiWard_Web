@@ -1,0 +1,21 @@
+.marco {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: var(--radio-control);
+  background: #f1f5f9;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.imagen {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+.icono {
+  color: var(--color-deshabilitado);
+}

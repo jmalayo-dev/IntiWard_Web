@@ -1,0 +1,108 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.etiqueta {
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  color: var(--color-texto);
+}
+
+.control {
+  position: relative;
+}
+
+.entrada {
+  width: 100%;
+  height: var(--alto-control);
+  padding: 0 14px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.entrada::placeholder {
+  color: var(--color-deshabilitado);
+}
+
+.entrada:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 1px var(--color-primario);
+}
+
+.entrada:disabled {
+  background: var(--color-fondo);
+  color: var(--color-deshabilitado);
+}
+
+.conBoton {
+  padding-right: 44px;
+}
+
+.conError,
+.conError:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 1px var(--color-error);
+}
+
+.verClave {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  padding: 2px;
+  border: 0;
+  background: none;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.verClave:hover {
+  color: var(--color-texto);
+}
+
+.mensajeError {
+  font-size: var(--texto-pequeno);
+  color: var(--color-error);
+}
+
+.ayuda {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.area {
+  height: auto;
+  padding: 12px 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.pieArea {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-3);
+}
+
+.prefijo {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+  pointer-events: none;
+}
+
+.conPrefijo {
+  padding-left: 40px;
+}

@@ -1,0 +1,12 @@
+.fila {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-4);
+  flex-wrap: wrap;
+}
+
+.campo {
+  flex: 1;
+  max-width: 480px;
+  min-width: 200px;
+}

@@ -1,0 +1,89 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+  padding: var(--esp-6) var(--esp-6) var(--esp-6);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.grupo {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0 0 var(--esp-6);
+  border: 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.titulo {
+  margin-bottom: var(--esp-3);
+  padding: 0;
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+}
+
+.opcion input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-primario);
+}
+
+.casilla span {
+  color: var(--color-texto-secundario);
+}
+
+.precios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--esp-3);
+}
+
+.precio {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.etiquetaPrecio {
+  font-size: 12px;
+  color: var(--color-texto-secundario);
+}
+
+.controlPrecio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  font-size: 12px;
+  color: var(--color-texto-secundario);
+}
+
+.controlPrecio:focus-within {
+  border-color: var(--color-primario);
+}
+
+.controlPrecio input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+}

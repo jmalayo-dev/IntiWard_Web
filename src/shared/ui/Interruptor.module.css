@@ -1,0 +1,61 @@
+.interruptor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-3);
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.control {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.pista {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  border-radius: var(--radio-pildora);
+  background: var(--color-borde);
+  transition: background-color 0.15s;
+}
+
+.pista::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.2);
+  transition: transform 0.15s;
+}
+
+.control:checked + .pista {
+  background: var(--color-primario);
+}
+
+.control:checked + .pista::after {
+  transform: translateX(20px);
+}
+
+.control:focus-visible + .pista {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
+.deshabilitado {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.texto {
+  color: var(--color-texto);
+}

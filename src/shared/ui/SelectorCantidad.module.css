@@ -1,0 +1,42 @@
+.selector {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 100%;
+  border: 0;
+  background: none;
+  color: var(--color-texto);
+  cursor: pointer;
+}
+
+.boton:disabled {
+  color: var(--color-deshabilitado);
+  cursor: not-allowed;
+}
+
+.valor {
+  min-width: 36px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--color-borde);
+  border-right: 1px solid var(--color-borde);
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+}
+
+.deshabilitado {
+  background: var(--color-fondo);
+  opacity: 0.7;
+}

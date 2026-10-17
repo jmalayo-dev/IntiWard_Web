@@ -1,0 +1,30 @@
+.tarjeta {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+  padding: var(--esp-6);
+  min-width: 0;
+}
+
+.sinRelleno {
+  padding: 0;
+  overflow: hidden;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  margin-bottom: var(--esp-4);
+}
+
+.sinRelleno .cabecera {
+  padding: var(--esp-6) var(--esp-6) 0;
+}
+
+.titulo {
+  font-size: var(--texto-titulo-seccion);
+  font-weight: 600;
+}

@@ -1,0 +1,70 @@
+.formulario {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logoMovil {
+  display: none;
+  margin-bottom: var(--esp-8);
+}
+
+.titulo {
+  font-size: var(--texto-titulo-pagina);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-texto);
+}
+
+.subtitulo {
+  margin-top: var(--esp-2);
+  margin-bottom: var(--esp-6);
+  color: var(--color-texto-secundario);
+}
+
+.aviso {
+  margin-bottom: var(--esp-6);
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pie {
+  margin-top: var(--esp-6);
+  text-align: center;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.enlace {
+  margin-left: var(--esp-1);
+  font-weight: 600;
+  color: var(--color-primario);
+}
+
+.enlace:hover {
+  text-decoration: underline;
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--color-texto-secundario);
+  transition: color 0.15s;
+}
+
+.volver:hover {
+  color: var(--color-texto);
+}
+
+@media (max-width: 899px) {
+  .logoMovil {
+    display: block;
+  }
+}

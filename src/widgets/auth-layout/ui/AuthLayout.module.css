@@ -1,0 +1,130 @@
+.pantalla {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: var(--esp-8) var(--esp-4);
+  background: #ddd;
+}
+
+/* Tarjeta que reparte marca y formulario; no ocupa toda la vista */
+.tarjeta {
+  display: flex;
+  width: 100%;
+  max-width: 1180px;
+  /*
+   * Alto máximo: lo que ocupa "Crear cuenta" (medido a 863 px), igual en el login para que no salte al cambiar de vista.
+   * En pantallas más bajas se ajusta al alto disponible (la ventana menos el margen de .pantalla) y el formulario
+   * se desplaza por dentro, así la tarjeta nunca desborda la pantalla. Por debajo de 520 px la página hace scroll.
+   */
+  height: min(864px, calc(100dvh - 2 * var(--esp-8)));
+  min-height: 520px;
+  /* La marca queda separada del borde de la tarjeta */
+  padding: var(--esp-3);
+  border-radius: 28px;
+  /* Lo que la onda (si está activa) descubre de la aurora es blanco, igual que el formulario */
+  background: var(--color-superficie);
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    0 12px 32px rgba(15, 23, 42, 0.1);
+}
+
+/* Mitad izquierda: marca. El fondo oscuro y la aurora los pone AuroraBackground (Tailwind, modo dark) */
+.marca {
+  /* 50 % + la amplitud de la onda, metida bajo el formulario: la división recta sigue en el centro */
+  position: relative;
+  z-index: 1;
+  flex: 0 0 calc(50% + var(--onda-amplitud));
+  margin-right: calc(-1 * var(--onda-amplitud));
+  padding: var(--esp-12) calc(var(--esp-12) + var(--onda-amplitud)) var(--esp-12) var(--esp-12);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.contenido {
+  /* Encima de la aurora */
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.frase {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.beneficios {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  margin: 0;
+  padding: var(--esp-2) 0 0;
+  list-style: none;
+}
+
+.beneficio {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  /* neutral-200, como el texto secundario del modo oscuro del componente */
+  color: #e5e5e5;
+  font-weight: 500;
+}
+
+.check {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  /* Sobre fondo oscuro: círculo dorado suave con el check en dorado */
+  color: #fff;
+  background-color: var(--color-acento);
+}
+
+/* Mitad derecha: formulario. Si no cabe (por ejemplo, con todos los errores del registro) se desplaza por dentro */
+.formulario {
+  flex: 0 0 50%;
+  display: flex;
+  align-items: safe center;
+  overflow-y: auto;
+  justify-content: center;
+  /* A la izquierda deja libre lo que puede entrar la aurora (hasta una amplitud) */
+  padding: var(--esp-8) var(--esp-12) var(--esp-8) calc(var(--onda-amplitud) + var(--esp-12));
+  background: var(--color-superficie);
+}
+
+@media (max-width: 1100px) {
+  .marca {
+    padding: var(--esp-8) calc(var(--esp-8) + var(--onda-amplitud)) var(--esp-8) var(--esp-8);
+  }
+  .formulario {
+    padding: var(--esp-8) var(--esp-6) var(--esp-8) calc(var(--onda-amplitud) + var(--esp-6));
+  }
+}
+
+/* En móvil: solo el formulario, con el logo arriba (lo pone el formulario) */
+@media (max-width: 899px) {
+  .marca {
+    display: none;
+  }
+  .tarjeta {
+    height: auto;
+    padding: 0;
+    border-radius: 20px;
+  }
+  .formulario {
+    flex-basis: 100%;
+    align-items: flex-start;
+    padding: var(--esp-8) var(--esp-4);
+    border-radius: inherit;
+  }
+}
