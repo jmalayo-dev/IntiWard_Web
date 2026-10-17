@@ -13,7 +13,7 @@ export const useStock = (idProducto) =>
 
 /**
  * Stock de varios productos en una llamada, como mapa { [idProducto]: { disponible, reservado, libre } }.
- * `ids` vacío o ausente: todos (panel de stock). `libre` = disponible − reservado: lo que se puede vender.
+ * `ids` vacío o ausente: todos (panel de stock). `libre` = `disponible`: inventario ya le descuenta lo reservado.
  */
 export function useStocks(ids, { habilitado = true } = {}) {
   const orden = ids ? [...ids].sort((a, b) => a - b) : undefined;
@@ -22,6 +22,6 @@ export function useStocks(ids, { habilitado = true } = {}) {
     queryFn: () => listarStock(orden),
     enabled: habilitado && (!ids || ids.length > 0),
     staleTime: 0,
-    select: (lista) => Object.fromEntries(lista.map((s) => [s.idProducto, { ...s, libre: Math.max(0, s.disponible - s.reservado) }])),
+    select: (lista) => Object.fromEntries(lista.map((s) => [s.idProducto, { ...s, libre: Math.max(0, s.disponible) }])),
   });
 }

@@ -30,9 +30,12 @@ function montos(total) {
   return { subtotal, igv: redondear(total - subtotal), total: redondear(total) };
 }
 
+/** Igual que ms-inventario: liberar devuelve lo reservado a `disponible`. */
 function liberar(lineas, idVenta) {
   for (const { idProducto, cantidad } of lineas) {
-    stock.find((s) => s.idProducto === idProducto).reservado -= cantidad;
+    const fila = stock.find((s) => s.idProducto === idProducto);
+    fila.disponible += cantidad;
+    fila.reservado -= cantidad;
     registrarMovimiento({ idProducto, tipo: 'LIBERACION', cantidad, idVenta });
   }
 }
@@ -117,17 +120,19 @@ export const pedidos = [
     };
     ventas.push(venta);
 
-    // Reserva todo o nada
+    // Reserva todo o nada. Como en ms-inventario, `disponible` ya descuenta lo reservado
     const sinStock = lineas.find((l) => {
       const fila = stock.find((s) => s.idProducto === l.idProducto);
-      return !fila || fila.disponible - fila.reservado < l.cantidad;
+      return !fila || fila.disponible < l.cantidad;
     });
     if (sinStock) {
       venta.estado = 'ANULADA';
       return error(409, `Stock insuficiente para ${sinStock.nombreProducto}`, request, [`idProducto: ${sinStock.idProducto}`]);
     }
     for (const l of lineas) {
-      stock.find((s) => s.idProducto === l.idProducto).reservado += l.cantidad;
+      const fila = stock.find((s) => s.idProducto === l.idProducto);
+      fila.disponible -= l.cantidad;
+      fila.reservado += l.cantidad;
       registrarMovimiento({ idProducto: l.idProducto, tipo: 'RESERVA', cantidad: l.cantidad, idVenta: venta.id });
     }
 
@@ -139,11 +144,10 @@ export const pedidos = [
 
     emitirComprobante({ venta, tipo: tipoComprobante, docCliente: docCliente || null, nombreRazonSocial: nombreRazonSocial.trim() });
 
-    // Confirmar la reserva: sale del disponible y queda el movimiento
+    // Confirmar la reserva: las unidades salen vendidas de `reservado` (el disponible ya bajó al reservar)
     for (const l of lineas) {
       const fila = stock.find((s) => s.idProducto === l.idProducto);
       fila.reservado -= l.cantidad;
-      fila.disponible -= l.cantidad;
       registrarMovimiento({ idProducto: l.idProducto, tipo: 'CONFIRMACION', cantidad: l.cantidad, idVenta: venta.id });
     }
     venta.estado = 'CONFIRMADA';

@@ -6,6 +6,12 @@ export function validarProducto(datos) {
   if (!datos.idMarca) errores.idMarca = 'Elige una marca';
   if (!datos.idCategoria) errores.idCategoria = 'Elige una categoría';
   if (datos.imagenUrl.trim() && !/^(https?:\/\/|\/)\S+$/.test(datos.imagenUrl.trim())) errores.imagenUrl = 'Ingresa una URL válida';
+  const specs = datos.especificaciones ?? [];
+  if (specs.some((e) => !e.nombre.trim() || !e.valor.trim())) {
+    errores.especificaciones = 'Completa el nombre y el valor de cada especificación, o quita las vacías';
+  } else if (new Set(specs.map((e) => e.nombre.trim().toLowerCase())).size !== specs.length) {
+    errores.especificaciones = 'Hay especificaciones con el mismo nombre';
+  }
   return errores;
 }
 

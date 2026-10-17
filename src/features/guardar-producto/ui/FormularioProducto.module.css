@@ -109,6 +109,56 @@
   font-weight: 500;
 }
 
+.cabeceraSeccion {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-4);
+}
+
+.ayudaSeccion {
+  margin-top: var(--esp-1);
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+.especificaciones {
+  display: grid;
+  gap: var(--esp-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.especificacion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+  gap: var(--esp-3);
+  align-items: start;
+}
+
+.quitar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  background: var(--color-superficie);
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+}
+
+.quitar:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.sinEspecificaciones {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario);
+}
+
 @media (max-width: 1100px) {
   .columnas {
     grid-template-columns: 1fr;
@@ -118,6 +168,16 @@
 @media (max-width: 560px) {
   .fila {
     grid-template-columns: 1fr;
+  }
+  .especificacion {
+    grid-template-columns: minmax(0, 1fr) 44px;
+  }
+  .especificacion > :nth-child(2) {
+    grid-column: 1;
+  }
+  .especificacion > .quitar {
+    grid-column: 2;
+    grid-row: 1;
   }
   .tarjeta {
     padding: var(--esp-6) var(--esp-4);

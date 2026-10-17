@@ -1,13 +1,12 @@
 import { http, HttpResponse } from 'msw';
 import { ENDPOINTS } from '@/shared/api/endpoints';
 import { comprobantes, correlativos } from '../db/comprobantes';
-import { ventas } from '../db/ventas';
 import { ahoraIso, error, latencia, redondear, ruta, rutaParam, siguienteId } from '../lib/respuestas';
 import { requiereRol, requiereSesion } from '../lib/sesion';
 
 const SERIES = { BOLETA: 'B001', FACTURA: 'F001' };
 
-/** Lo que hace POST /comprobantes (ruta interna): numeración correlativa por serie, uno por venta. */
+/** Lo que hace POST /comprobantes (ruta interna): numeración correlativa por serie, uno por venta. ms-pedidos manda el idUsuario de la venta. */
 export function emitirComprobante({ venta, tipo, docCliente, nombreRazonSocial }) {
   const existente = comprobantes.find((c) => c.idVenta === venta.id);
   if (existente) return existente;
@@ -17,6 +16,7 @@ export function emitirComprobante({ venta, tipo, docCliente, nombreRazonSocial }
   const comprobante = {
     id,
     idVenta: venta.id,
+    idUsuario: venta.idUsuario,
     tipo,
     numero: `${serie}-${String(correlativos[serie]).padStart(8, '0')}`,
     docCliente,
@@ -31,8 +31,11 @@ export function emitirComprobante({ venta, tipo, docCliente, nombreRazonSocial }
   return comprobante;
 }
 
-const esDueno = (usuario, comprobante) =>
-  usuario.rol === 'ADMIN' || ventas.find((v) => v.id === comprobante.idVenta)?.idUsuario === usuario.id;
+/** El dueño se lee del propio comprobante: no hace falta preguntarle a ms-pedidos. */
+const esDueno = (usuario, comprobante) => usuario.rol === 'ADMIN' || comprobante.idUsuario === usuario.id;
+
+/** ComprobanteResponse: `idUsuario` es interno y no se devuelve. */
+const aComprobanteResponse = ({ idUsuario: _idUsuario, ...comprobante }) => comprobante;
 
 /** PDF mínimo válido, solo para probar la descarga. */
 function pdfDeEjemplo(comprobante) {
@@ -76,7 +79,7 @@ export const comprobantesHandlers = [
       subtotal: suma('subtotal'),
       igv: suma('igv'),
       total: suma('total'),
-      comprobantes: lista,
+      comprobantes: lista.map(aComprobanteResponse),
     });
   }),
 
@@ -84,7 +87,7 @@ export const comprobantesHandlers = [
     await latencia();
     const [usuario, fallo] = requiereSesion(request);
     if (fallo) return fallo;
-    return HttpResponse.json(comprobantes.filter((c) => esDueno(usuario, c)).sort((a, b) => b.id - a.id));
+    return HttpResponse.json(comprobantes.filter((c) => esDueno(usuario, c)).sort((a, b) => b.id - a.id).map(aComprobanteResponse));
   }),
 
   http.get(rutaParam(ENDPOINTS.comprobantes.porVenta, 'idVenta'), async ({ request, params }) => {
@@ -94,7 +97,7 @@ export const comprobantesHandlers = [
     const comprobante = comprobantes.find((c) => c.idVenta === Number(params.idVenta));
     if (!comprobante) return error(404, `No hay comprobante para la venta ${params.idVenta}`, request);
     if (!esDueno(usuario, comprobante)) return error(403, 'No tiene permisos para este recurso', request);
-    return HttpResponse.json(comprobante);
+    return HttpResponse.json(aComprobanteResponse(comprobante));
   }),
 
   http.get(rutaParam(ENDPOINTS.comprobantes.pdf), async ({ request, params }) => {
@@ -116,6 +119,6 @@ export const comprobantesHandlers = [
     const comprobante = comprobantes.find((c) => c.id === Number(params.id));
     if (!comprobante) return error(404, `Comprobante ${params.id} no encontrado`, request);
     if (!esDueno(usuario, comprobante)) return error(403, 'No tiene permisos para este recurso', request);
-    return HttpResponse.json(comprobante);
+    return HttpResponse.json(aComprobanteResponse(comprobante));
   }),
 ];

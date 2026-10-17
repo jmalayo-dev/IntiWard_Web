@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { ENDPOINTS } from '@/shared/api/endpoints';
 import { movimientos } from '../db/movimientos';
+import { productos } from '../db/productos';
 import { stock } from '../db/stock';
 import { ahoraIso, error, latencia, ruta, rutaParam, siguienteId } from '../lib/respuestas';
 import { requiereRol } from '../lib/sesion';
@@ -16,20 +17,36 @@ function aStockResponse(fila) {
   return { ...fila, actualizadoEn: ultimo || null };
 }
 
+/** Un producto sin entradas no tiene fila: su stock es 0 (no hay llamada de catálogo a inventario al crearlo). */
+const sinFila = (idProducto) => ({ idProducto, disponible: 0, reservado: 0, actualizadoEn: null });
+
+/** Fila del producto; la crea en 0 si el producto existe en catálogo y aún no tenía (primera entrada o ajuste). */
+function filaParaMover(idProducto) {
+  let fila = stock.find((s) => s.idProducto === idProducto);
+  if (!fila && productos.some((p) => p.id === idProducto)) {
+    fila = { idProducto, disponible: 0, reservado: 0 };
+    stock.push(fila);
+  }
+  return fila;
+}
+
 export const inventario = [
   // Propuesta → Arévalo: GET /stock?ids=1,2,3 devuelve varios de una vez; sin ids, todos (vista 5.5)
   http.get(ruta(ENDPOINTS.stock.lista), async ({ request }) => {
     await latencia();
     const ids = new URL(request.url).searchParams.get('ids')?.split(',').filter(Boolean).map(Number);
-    const lista = ids?.length ? stock.filter((s) => ids.includes(s.idProducto)) : stock;
-    return HttpResponse.json(lista.map(aStockResponse));
+    if (!ids?.length) return HttpResponse.json(stock.map(aStockResponse));
+    // Cada id pedido tiene respuesta: los que no tienen fila salen en 0
+    return HttpResponse.json(ids.map((id) => {
+      const fila = stock.find((s) => s.idProducto === id);
+      return fila ? aStockResponse(fila) : sinFila(id);
+    }));
   }),
 
-  http.get(rutaParam(ENDPOINTS.stock.detalle, 'idProducto'), async ({ request, params }) => {
+  http.get(rutaParam(ENDPOINTS.stock.detalle, 'idProducto'), async ({ params }) => {
     await latencia();
     const fila = stock.find((s) => s.idProducto === Number(params.idProducto));
-    if (!fila) return error(404, `No hay stock registrado para el producto ${params.idProducto}`, request);
-    return HttpResponse.json(aStockResponse(fila));
+    return HttpResponse.json(fila ? aStockResponse(fila) : sinFila(Number(params.idProducto)));
   }),
 
   http.post(ruta(ENDPOINTS.stock.entrada), async ({ request }) => {
@@ -40,8 +57,8 @@ export const inventario = [
     if (!(Number.isInteger(cantidad) && cantidad > 0)) {
       return error(400, 'Datos inválidos', request, ['cantidad: debe ser un entero mayor que 0']);
     }
-    const fila = stock.find((s) => s.idProducto === Number(idProducto));
-    if (!fila) return error(404, `No hay stock registrado para el producto ${idProducto}`, request);
+    const fila = filaParaMover(Number(idProducto));
+    if (!fila) return error(404, `Producto ${idProducto} no encontrado`, request);
     fila.disponible += cantidad;
     registrarMovimiento({ idProducto: fila.idProducto, tipo: 'ENTRADA', cantidad, motivo: motivo?.trim() || null });
     return HttpResponse.json(aStockResponse(fila));
@@ -58,11 +75,12 @@ export const inventario = [
     if (!Number.isInteger(disponible) || disponible < 0) detalles.push('disponible: no puede ser negativo');
     if (detalles.length) return error(400, 'Datos inválidos', request, detalles);
 
-    const fila = stock.find((s) => s.idProducto === Number(params.idProducto));
-    if (!fila) return error(404, `No hay stock registrado para el producto ${params.idProducto}`, request);
+    const fila = filaParaMover(Number(params.idProducto));
+    if (!fila) return error(404, `Producto ${params.idProducto} no encontrado`, request);
     const diferencia = disponible - fila.disponible;
     fila.disponible = disponible;
-    registrarMovimiento({ idProducto: fila.idProducto, tipo: 'AJUSTE', cantidad: diferencia, motivo: motivo.trim() });
+    // La base rechaza un movimiento con cantidad 0 (ck_movimiento_cantidad): si no cambia, no se registra
+    if (diferencia !== 0) registrarMovimiento({ idProducto: fila.idProducto, tipo: 'AJUSTE', cantidad: diferencia, motivo: motivo.trim() });
     return HttpResponse.json(aStockResponse(fila));
   }),
 

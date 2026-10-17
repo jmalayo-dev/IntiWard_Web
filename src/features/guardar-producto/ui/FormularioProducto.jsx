@@ -4,7 +4,7 @@ import { useGuardarProducto } from '../model/useGuardarProducto';
 import { camposDelServidor, validarProducto } from '../model/validar';
 import styles from './FormularioProducto.module.css';
 
-const VACIO = { nombre: '', descripcion: '', idMarca: '', idCategoria: '', precio: '', imagenUrl: '', activo: true };
+const VACIO = { nombre: '', descripcion: '', idMarca: '', idCategoria: '', precio: '', imagenUrl: '', activo: true, especificaciones: [] };
 
 const desdeProducto = (p) =>
   p
@@ -16,6 +16,7 @@ const desdeProducto = (p) =>
         precio: String(p.precio),
         imagenUrl: p.imagenUrl ?? '',
         activo: p.activo,
+        especificaciones: (p.especificaciones ?? []).map((e) => ({ nombre: e.nombre, valor: e.valor })),
       }
     : VACIO;
 
@@ -41,6 +42,15 @@ export function FormularioProducto({ producto, marcas = [], categorias = [], alG
     if (error) reset();
   };
 
+  const especificaciones = datos.especificaciones;
+  const cambiarEspecificacion = (indice, campo, valor) =>
+    cambiar(
+      'especificaciones',
+      especificaciones.map((e, i) => (i === indice ? { ...e, [campo]: valor } : e)),
+    );
+  const agregarEspecificacion = () => cambiar('especificaciones', [...especificaciones, { nombre: '', valor: '' }]);
+  const quitarEspecificacion = (indice) => cambiar('especificaciones', especificaciones.filter((_, i) => i !== indice));
+
   const guardar = (e) => {
     e.preventDefault();
     setIntento(true);
@@ -57,6 +67,7 @@ export function FormularioProducto({ producto, marcas = [], categorias = [], alG
         precio: Number(datos.precio),
         imagenUrl: datos.imagenUrl.trim() || null,
         activo: datos.activo,
+        especificaciones: especificaciones.map((e) => ({ nombre: e.nombre.trim(), valor: e.valor.trim() })),
       },
       { onSuccess: (guardado) => alGuardar?.(guardado) },
     );
@@ -177,6 +188,48 @@ export function FormularioProducto({ producto, marcas = [], categorias = [], alG
           </div>
         </section>
       </div>
+
+      <section className={styles.tarjeta} aria-labelledby="titulo-especificaciones">
+        <div className={styles.cabeceraSeccion}>
+          <div>
+            <h2 id="titulo-especificaciones" className={styles.titulo}>
+              Especificaciones
+            </h2>
+            <p className={styles.ayudaSeccion}>Se muestran en la pestaña "Especificaciones" del detalle del producto. Ej.: Resolución · 1080p.</p>
+          </div>
+          <Boton variante="secundario" onClick={agregarEspecificacion}>
+            <Icono nombre="mas" tamano={18} /> Agregar
+          </Boton>
+        </div>
+        {especificaciones.length ? (
+          <ul className={styles.especificaciones}>
+            {especificaciones.map((e, i) => (
+              <li key={i} className={styles.especificacion}>
+                <Campo
+                  aria-label={`Nombre de la especificación ${i + 1}`}
+                  placeholder="Nombre (ej. Resolución)"
+                  value={e.nombre}
+                  onChange={(ev) => cambiarEspecificacion(i, 'nombre', ev.target.value)}
+                  maxLength={60}
+                />
+                <Campo
+                  aria-label={`Valor de la especificación ${i + 1}`}
+                  placeholder="Valor (ej. 1080p)"
+                  value={e.valor}
+                  onChange={(ev) => cambiarEspecificacion(i, 'valor', ev.target.value)}
+                  maxLength={120}
+                />
+                <button type="button" className={styles.quitar} onClick={() => quitarEspecificacion(i)} aria-label={`Quitar la especificación ${i + 1}`}>
+                  <Icono nombre="papelera" tamano={18} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.sinEspecificaciones}>Este producto no tiene especificaciones.</p>
+        )}
+        {errorDe('especificaciones') && <Aviso tipo="error">{errorDe('especificaciones')}</Aviso>}
+      </section>
 
       {!producto && (
         <Aviso tipo="info">

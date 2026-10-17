@@ -483,18 +483,18 @@ export const ENDPOINTS = {
 | auth | `POST /usuarios` · `PUT /usuarios/{id}` · `DELETE /usuarios/{id}` | ADMIN | ⬜ | ✅ |
 | auth | `GET` / `PUT /usuarios/me` (propuesta) | El mismo usuario | ⬜ | ✅ |
 | catalogo | `GET /productos?page&size&categoria&marca&q` + `precioMin`, `precioMax`, `conStock`, `sort`, `inactivos` (propuesta) | Público (`inactivos` solo ADMIN) | 🟡 sin paginación ni filtros | ✅ |
-| catalogo | `GET /productos/{id}` | Público | ✅ | ✅ |
-| catalogo | `POST /productos` · `PUT /productos/{id}` · `DELETE /productos/{id}` | ADMIN | ⬜ | ✅ |
+| catalogo | `GET /productos/{id}` (200 también si está inactivo, con `activo: false`) | Público | 🟡 faltan campos | ✅ |
+| catalogo | `POST /productos` · `PUT /productos/{id}` (con `especificaciones`) · `DELETE /productos/{id}` | ADMIN | ⬜ | ✅ |
 | catalogo | `GET /marcas` · `GET /categorias` | Público | ⬜ | ✅ |
 | catalogo | `POST /marcas` · `PUT /marcas/{id}` · `POST /categorias` · `PUT /categorias/{id}` (propuesta) | ADMIN | ⬜ | ✅ |
-| inventario | `GET /stock/{idProducto}` | Público | ✅ | ✅ |
-| inventario | `GET /stock?ids=1,2,3` (propuesta; sin `ids`, todos) | Público | ⬜ | ✅ |
+| inventario | `GET /stock/{idProducto}` (sin entradas: 200 en 0) | Público | 🟡 falta `actualizadoEn` | ✅ |
+| inventario | `GET /stock?ids=1,2,3` (propuesta; una entrada por id, en 0 si no tiene stock; sin `ids`, todos) | Público | ⬜ | ✅ |
 | inventario | `POST /stock/entrada` · `PUT /stock/{idProducto}` | ADMIN | ⬜ | ✅ |
 | inventario | `GET /movimientos?idProducto=` | ADMIN | ⬜ | ✅ |
 | pedidos | `GET /carrito` · `POST /carrito/items` · `PUT` / `DELETE /carrito/items/{idProducto}` | CLIENTE | ⬜ | ✅ |
 | pedidos | `POST /pedidos/checkout` | CLIENTE | ⬜ | ✅ |
 | pedidos | `GET /pedidos` · `GET /pedidos/{id}` | Dueño o ADMIN | 🟡 sin control de dueño | ✅ |
-| comprobantes | `GET /comprobantes` · `GET /comprobantes/{id}` | Dueño o ADMIN | ✅ | ✅ |
+| comprobantes | `GET /comprobantes` · `GET /comprobantes/{id}` | Dueño o ADMIN | 🟡 sin control de dueño | ✅ |
 | comprobantes | `GET /comprobantes/venta/{idVenta}` · `GET /comprobantes/{id}/pdf` | Dueño o ADMIN | ⬜ | ✅ |
 | comprobantes | `GET /comprobantes/reporte?desde&hasta` | ADMIN | ⬜ | ✅ |
 
@@ -506,28 +506,28 @@ Las marcadas **real** salen tal cual del DTO del backend hoy. Las marcadas **pro
 |---|---|---|
 | Login | `{ token, tipo, expiraEnMinutos, rol }` | real (`LoginResponse`) |
 | Usuario | `{ id, nombres, apellidos, correo, telefono, direccion, fotoUrl, rol, activo, creadoEn }` | real (`UsuarioResponse`) |
-| Usuario (lo que falta) | `+ bloqueadoHasta`, `+ ultimoAcceso` (vista 5.10) | propuesta → Galarza |
+| Usuario (lo que falta) | `+ bloqueadoHasta`, `+ ultimoAcceso` (vista 5.10; columna nueva `usuario.ultimo_acceso`) | propuesta → Galarza |
 | Producto | `{ id, nombre, descripcion, precio, imagenUrl, marca, categoria }` | real (`ProductoResponse`) |
-| Producto (lo que falta) | `+ activo` (contrato C5), `+ idMarca`, `+ idCategoria` (para editar en 5.3), `+ especificaciones: [{ nombre, valor }]` (pestaña de la 4.3) | propuesta → César |
+| Producto (lo que falta) | `+ activo` (contrato C5), `+ idMarca`, `+ idCategoria` (para editar en 5.3), `+ especificaciones: [{ nombre, valor }]` (pestaña de la 4.3; tabla nueva `producto_especificacion`, se envían en `POST` / `PUT`) | propuesta → César |
 | Página | `{ content: [...], page: { size, number, totalElements, totalPages } }` | propuesta → César (formato `VIA_DTO` de Spring Data) |
 | Marca / categoría | `{ id, nombre, activo, productos }` (`productos` = cantidad de activos, para los filtros y la 5.4) | propuesta → César |
-| Stock | `{ idProducto, disponible, reservado }` | real (`StockResponse`) |
+| Stock | `{ idProducto, disponible, reservado }`. `disponible` ya descuenta lo reservado: es lo que se puede vender | real (`StockResponse`) |
 | Stock (lo que falta) | `+ actualizadoEn` (fecha del último movimiento, vista 5.5) | propuesta → Arévalo |
 | Movimiento | `{ id, idProducto, tipo, cantidad, idVenta, motivo, creadoEn }` con `tipo` = `ENTRADA` · `RESERVA` · `CONFIRMACION` · `LIBERACION` · `AJUSTE` (este con signo) | propuesta → Arévalo |
 | Carrito | `{ items: [{ idProducto, nombre, marca, precio, imagenUrl, cantidad, importe }], total }` | propuesta → Evelyn |
 | Checkout (pide) | `{ tipoComprobante, docCliente, nombreRazonSocial }`; en boleta `docCliente` puede ser `null` (DNI opcional) | propuesta (README de ms-pedidos) |
 | Venta | `{ id, idUsuario, fechaVenta, estado, tipoComprobante, subtotal, igv, total }` | real (`VentaResponse`) |
 | Venta (lo que falta) | `+ detalles: [{ idProducto, nombreProducto, precioUnitario, cantidad, importe }]` en `GET /pedidos/{id}` **y en `GET /pedidos`** (miniaturas de 4.10, reportes 5.9) | propuesta → Evelyn |
-| Comprobante | `{ id, idVenta, tipo, numero, docCliente, nombreRazonSocial, subtotal, igv, total, pdfUrl, emitidoEn }` | real (`ComprobanteResponse`) |
+| Comprobante | `{ id, idVenta, tipo, numero, docCliente, nombreRazonSocial, subtotal, igv, total, pdfUrl, emitidoEn }`. El servicio guarda además `idUsuario` (copiado de la venta) para el control de dueño; no sale en la respuesta | real (`ComprobanteResponse`) |
 | Reporte | `{ desde, hasta, cantidad, subtotal, igv, total, comprobantes: [...] }` | propuesta → Galarza |
 | Error | `{ fecha, status, error, mensaje, ruta, detalles }` | real (`ApiError`) |
 
 **Huecos del contrato que el front necesita** (pedírselos al responsable; hoy solo los responde el mock):
 
-1. **César (catálogo):** `activo`, `idMarca`, `idCategoria` y `especificaciones` en el producto; paginación y filtros (`marca` con varias separadas por coma, `precioMin`, `precioMax`, `sort`, `inactivos` solo para ADMIN, y `conStock`, que obliga a catálogo a consultar a inventario); `GET /marcas` y `/categorias` con la cantidad de productos; crear, renombrar y activar/desactivar marcas y categorías.
-2. **Arévalo (inventario):** `GET /stock?ids=1,2,3` para pedir el stock de una grilla en una sola llamada (sin `ids`, todos, para la vista 5.5); `actualizadoEn` en el stock; los tipos de movimiento `RESERVA`, `CONFIRMACION` y `LIBERACION`.
-3. **Evelyn (pedidos):** `detalles` en `GET /pedidos` y `GET /pedidos/{id}`; la forma del carrito con `marca`; en boleta el DNI es opcional.
-4. **Galarza (auth):** `POST /auth/registro` (con 409 si el correo existe); `GET` / `PUT /usuarios/me` para que el cliente edite su perfil, su foto (URL) y su contraseña; `bloqueadoHasta` y `ultimoAcceso` en `UsuarioResponse`; reactivar una cuenta con `PUT` `{ activo: true }` también levanta el bloqueo por intentos.
+1. **César (catálogo):** `activo`, `idMarca`, `idCategoria` y `especificaciones` en el producto; paginación y filtros (`marca` con varias separadas por coma, `precioMin`, `precioMax`, `sort`, `inactivos` solo para ADMIN, y `conStock`, que obliga a catálogo a consultar a inventario); `GET /marcas` y `/categorias` con la cantidad de productos; crear, renombrar y activar/desactivar marcas y categorías. Un producto inactivo responde 200 con `activo: false`; al crear un producto no se llama a inventario.
+2. **Arévalo (inventario):** `GET /stock?ids=1,2,3` para pedir el stock de una grilla en una sola llamada (sin `ids`, todos, para la vista 5.5); `actualizadoEn` en el stock; los tipos de movimiento `RESERVA`, `CONFIRMACION` y `LIBERACION`; un producto sin entradas responde stock 0 (no 404); `GET /stock` como ruta pública.
+3. **Evelyn (pedidos):** `detalles` en `GET /pedidos` y `GET /pedidos/{id}`; la forma del carrito con `marca`; en boleta el DNI es opcional; mandar el `idUsuario` de la venta al emitir el comprobante.
+4. **Galarza (auth):** `POST /auth/registro` (con 409 si el correo existe); `GET` / `PUT /usuarios/me` para que el cliente edite su perfil, su foto (URL) y su contraseña; `bloqueadoHasta` y `ultimoAcceso` en `UsuarioResponse`; reactivar una cuenta con `PUT` `{ activo: true }` también levanta el bloqueo por intentos. En comprobantes: filtrar por `comprobante.id_usuario` para el control de dueño.
 
 ### `src/shared/api/http.js`
 

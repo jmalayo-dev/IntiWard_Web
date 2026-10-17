@@ -51,7 +51,10 @@ export function ProductoDetallePage() {
     );
   }
 
-  const libre = stock ? Math.max(0, stock.disponible - stock.reservado) : undefined;
+  // Un producto inactivo responde 200 con activo: false (contrato C5); fuera del panel se ve como inexistente
+  if (!producto.activo && !esAdmin) return <PantallaError tipo={404} />;
+
+  const libre = stock ? Math.max(0, stock.disponible) : undefined;
   const agotado = libre === 0;
 
   return (
@@ -70,9 +73,7 @@ export function ProductoDetallePage() {
         </div>
 
         <div className={styles.info}>
-          {!producto.activo && (
-            <Aviso tipo="info">Este producto ya no está disponible{esAdmin ? ' en la tienda (está inactivo)' : ''}.</Aviso>
-          )}
+          {!producto.activo && <Aviso tipo="info">Este producto está inactivo: no se ve en la tienda.</Aviso>}
           <div className={styles.marcaFila}>
             <span className={styles.marca}>{producto.marca}</span>
             <Insignia tono="neutro">{producto.categoria}</Insignia>

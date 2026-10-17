@@ -5,7 +5,8 @@ import { ventas } from './ventas';
  * Movimiento (propuesta → Arévalo): { id, idProducto, tipo, cantidad, idVenta, motivo, creadoEn }.
  * Tipos: ENTRADA, RESERVA, CONFIRMACION, LIBERACION y AJUSTE (cantidad con signo).
  * Se arma desde las ventas para que cuadre con el stock actual: el stock inicial del 01/09 es lo que
- * hace falta para llegar a las cantidades de db/stock.js.
+ * hace falta para llegar a las cantidades de db/stock.js. Las unidades físicas son `disponible + reservado`
+ * (ms-inventario descuenta lo reservado de `disponible`).
  */
 const sueltos = [
   { idProducto: 5, tipo: 'ENTRADA', cantidad: 25, idVenta: null, motivo: 'Guía de remisión 001-4521', creadoEn: '2026-10-09T08:30:00' },
@@ -30,10 +31,10 @@ function generar() {
   );
 
   const iniciales = stock
-    .map(({ idProducto, disponible }) => {
+    .map(({ idProducto, disponible, reservado }) => {
       const vendidas = deVentas.filter((m) => m.idProducto === idProducto && m.tipo === 'CONFIRMACION').reduce((s, m) => s + m.cantidad, 0);
       const otros = sueltos.filter((m) => m.idProducto === idProducto).reduce((s, m) => s + m.cantidad, 0);
-      return { idProducto, tipo: 'ENTRADA', cantidad: disponible + vendidas - otros, idVenta: null, motivo: 'Stock inicial', creadoEn: '2026-09-01T08:30:00' };
+      return { idProducto, tipo: 'ENTRADA', cantidad: disponible + reservado + vendidas - otros, idVenta: null, motivo: 'Stock inicial', creadoEn: '2026-09-01T08:30:00' };
     })
     .filter((m) => m.cantidad > 0);
 

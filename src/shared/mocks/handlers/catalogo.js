@@ -24,8 +24,17 @@ function validarProducto(datos) {
   if (!(Number(datos.precio) > 0)) detalles.push('precio: debe ser mayor que 0');
   if (!marcas.some((m) => m.id === Number(datos.idMarca))) detalles.push('idMarca: no existe');
   if (!categorias.some((c) => c.id === Number(datos.idCategoria))) detalles.push('idCategoria: no existe');
+  const specs = datos.especificaciones ?? [];
+  if (!Array.isArray(specs) || specs.some((e) => !e?.nombre?.trim() || !e?.valor?.trim())) {
+    detalles.push('especificaciones: cada una necesita nombre y valor');
+  } else if (new Set(specs.map((e) => e.nombre.trim().toLowerCase())).size !== specs.length) {
+    detalles.push('especificaciones: hay nombres repetidos');
+  }
   return detalles;
 }
+
+/** Tabla producto_especificacion: la lista enviada reemplaza a la anterior, en el mismo orden. */
+const aEspecificaciones = (lista = []) => lista.map((e) => ({ nombre: e.nombre.trim(), valor: e.valor.trim() }));
 
 /** Orden: `sort=precio,asc` · `precio,desc` · `nombre,asc` (formato Spring Data). Sin sort: por id. */
 function ordenar(lista, sort) {
@@ -35,10 +44,8 @@ function ordenar(lista, sort) {
   return [...lista].sort((a, b) => (campo === 'precio' ? a.precio - b.precio : a.nombre.localeCompare(b.nombre, 'es')) * factor);
 }
 
-const disponibleDe = (idProducto) => {
-  const fila = stock.find((s) => s.idProducto === idProducto);
-  return fila ? fila.disponible - fila.reservado : 0;
-};
+/** `disponible` ya descuenta lo reservado (ms-inventario). Sin fila de stock: 0. */
+const disponibleDe = (idProducto) => stock.find((s) => s.idProducto === idProducto)?.disponible ?? 0;
 
 /** Marca o categoría con la cantidad de productos activos (propuesta → César, para los filtros y la vista 5.4). */
 const conConteo = (campo) => (x) => ({ ...x, productos: productos.filter((p) => p[campo] === x.id && p.activo).length });
@@ -111,8 +118,9 @@ export const catalogo = [
 
   http.get(rutaParam(ENDPOINTS.productos.detalle), async ({ request, params }) => {
     await latencia();
+    // Inactivo: 200 con activo: false para todos (contrato C5); la página de detalle decide qué mostrar
     const producto = productos.find((p) => p.id === Number(params.id));
-    if (!producto || (!producto.activo && !esAdmin(request))) return error(404, `Producto ${params.id} no encontrado`, request);
+    if (!producto) return error(404, `Producto ${params.id} no encontrado`, request);
     return HttpResponse.json(aProductoResponse(producto));
   }),
 
@@ -133,11 +141,10 @@ export const catalogo = [
       idMarca: Number(datos.idMarca),
       idCategoria: Number(datos.idCategoria),
       activo: datos.activo ?? true,
-      especificaciones: [],
+      especificaciones: aEspecificaciones(datos.especificaciones),
     };
     productos.push(nuevo);
-    // ms-inventario crea el stock en 0 para cada producto nuevo
-    stock.push({ idProducto: nuevo.id, disponible: 0, reservado: 0 });
+    // Sin llamada a inventario: un producto sin entradas tiene stock 0 (la fila se crea con la primera ENTRADA)
     return HttpResponse.json(aProductoResponse(nuevo), { status: 201 });
   }),
 
@@ -159,6 +166,7 @@ export const catalogo = [
       idMarca: Number(datos.idMarca),
       idCategoria: Number(datos.idCategoria),
       activo: datos.activo ?? producto.activo,
+      especificaciones: aEspecificaciones(datos.especificaciones),
     });
     return HttpResponse.json(aProductoResponse(producto));
   }),
