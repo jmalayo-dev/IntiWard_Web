@@ -24,8 +24,13 @@ async function encenderMocks() {
   registrarAlFallarGateway(reactivar);
 }
 
-// En build (import.meta.env.DEV = false) Vite descarta el import: los mocks nunca llegan a producción
-const mocks = import.meta.env.DEV ? encenderMocks() : Promise.resolve();
+/*
+ * Los mocks se encienden en desarrollo y, solo si se pide, en un build de demostración
+ * (VITE_MOCKS_EN_BUILD=true, por ejemplo en Render). Vite resuelve la condición al compilar: en un build
+ * normal queda en false y descarta el import, así que los mocks no llegan a producción.
+ */
+const usarMocks = import.meta.env.DEV || import.meta.env.VITE_MOCKS_EN_BUILD === 'true';
+const mocks = usarMocks ? encenderMocks() : Promise.resolve();
 
 mocks.then(() => {
   createRoot(document.getElementById('root')).render(

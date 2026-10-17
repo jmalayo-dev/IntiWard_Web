@@ -40,6 +40,30 @@ resumen, los reportes y las tablas del panel tengan datos. Las imágenes de prod
 Para probar la vista 4.9 "No pudimos completar tu compra", poner `VITE_MOCK_FALLA_COMPROBANTE=true`
 en `.env.development.local` y reiniciar `npm run dev`.
 
+## Publicar en Render
+
+El build normal (`npm run build`) **no incluye los mocks** y tampoco hay proxy de Vite: `/api` tiene que llegar a un
+backend real. Para publicar una **demo con datos simulados**, los mocks se encienden también en el build con una variable.
+
+En Render, como *Static Site*:
+
+| Opción | Valor |
+|---|---|
+| Build Command | `npm ci && npm run build` |
+| Publish Directory | `dist` |
+| Environment → `NODE_VERSION` | `22` |
+| Environment → `VITE_MOCKS_EN_BUILD` | `true` (demo con los cinco servicios simulados) |
+| Redirects/Rewrites | Source `/*` → Destination `/index.html`, Action **Rewrite** (para que `/catalogo`, `/admin`… no den 404 al recargar) |
+
+Las variables `VITE_*` se leen **al hacer el build**: después de cambiarlas en Render hay que volver a desplegar.
+Como en local, cada visitante tiene sus propios datos simulados y se reinician al recargar.
+
+**Cuando el backend esté publicado**, quitar `VITE_MOCKS_EN_BUILD` y elegir una de estas dos formas:
+
+- Una regla de Render antes de la anterior: Source `/api/*` → Destination `https://<gateway>/:splat`, Action **Rewrite**.
+  El navegador sigue viendo un solo dominio y no hace falta CORS.
+- O `VITE_API_URL=https://<gateway>` (sin `/api`), con CORS habilitado en el gateway para el dominio de Render.
+
 ## Backend real
 
 Crear `.env.development.local` (no se sube) y dejar en `VITE_MOCKS` solo los servicios que sigan simulados:

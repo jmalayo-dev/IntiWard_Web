@@ -864,6 +864,7 @@ src/shared/mocks/
 4. **Datos semilla = los de `PROTOTIPO_WEB.md` §3** (8 productos + uno inactivo, Ana Torres, pedido #00042 con 2 cámaras bala). Además, `db/ventas.js` genera con semilla fija un historial de ventas desde el 01/09/2026 hasta hoy, y `db/comprobantes.js` y `db/movimientos.js` salen de esas ventas (numeración B001/F001 en orden de fecha y stock inicial calculado para que cuadre con `db/stock.js`). Por eso la boleta del #00042 no es la B001-00000001 del prototipo.
 5. **Latencia simulada** de 300 ms, para ver los estados de carga.
 6. **Nunca se importan desde `features`, `entities` ni `pages`.** Solo `app/main.jsx` los enciende.
+7. **No llegan a producción.** `main.jsx` los enciende solo en desarrollo o, para una demo publicada (por ejemplo en Render), con `VITE_MOCKS_EN_BUILD=true` al hacer el build; sin esa variable, Vite descarta todo su código. En la demo, si no se define `VITE_MOCKS`, se simulan los cinco servicios.
 
 ### Usuarios de los mocks
 
