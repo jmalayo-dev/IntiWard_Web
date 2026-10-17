@@ -1,0 +1,59 @@
+.desplegable {
+  position: relative;
+}
+
+.lista {
+  position: absolute;
+  top: calc(100% + 6px);
+  z-index: 40;
+  min-width: 220px;
+  padding: 6px;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+}
+
+.derecha {
+  right: 0;
+}
+
+.izquierda {
+  left: 0;
+}
+
+.arriba {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  width: 100%;
+  padding: 9px var(--esp-3);
+  border: 0;
+  border-radius: var(--radio-control);
+  background: none;
+  color: var(--color-texto);
+  font-size: var(--texto-pequeno);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.opcion:hover {
+  background: #f4f4f5;
+}
+
+.opcion svg {
+  flex-shrink: 0;
+  color: #71717a;
+}
+
+.separador {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--color-borde);
+}

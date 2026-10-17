@@ -290,6 +290,19 @@ const TRAZOS = {
       <path d="M12 7v5l4 2" />
     </>
   ),
+  panelLateral: (
+    <>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M9 3v18" />
+    </>
+  ),
+  puntos: (
+    <>
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="19" cy="12" r="1" />
+      <circle cx="5" cy="12" r="1" />
+    </>
+  ),
   filtro: <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />,
 };
 

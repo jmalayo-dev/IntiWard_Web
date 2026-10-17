@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import styles from './Graficos.module.css';
 
 /** Ancho real del contenedor: el SVG se dibuja a ese ancho para que el texto no se agrande ni se achique. */
@@ -22,16 +22,32 @@ function escala(maximo) {
   return { tope: paso * 4, paso };
 }
 
-/** Barras verticales azules; al pasar el mouse muestra el monto. datos: [{ etiqueta, valor, destacado? }] */
-export function GraficoBarras({ datos, formato = String, alto = 260, etiqueta }) {
+/** Aclara (factor > 0) u oscurece (factor < 0) un color hex: sirve para las caras de las barras 3D. */
+function tono(hex, factor) {
+  const n = parseInt(hex.slice(1), 16);
+  const canal = (c) => Math.round(factor >= 0 ? c + (255 - c) * factor : c * (1 + factor));
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(canal);
+  return `rgb(${r} ${g} ${b})`;
+}
+
+/**
+ * Barras verticales; al pasar el mouse muestra el monto. datos: [{ etiqueta, valor, destacado? }]
+ * `tresD`: cada barra es un prisma (cara frontal, lateral más oscura y tapa más clara) sobre un piso.
+ * `color`: color base de las barras en hex (por defecto, el azul primario).
+ */
+export function GraficoBarras({ datos, formato = String, alto = 260, etiqueta, tresD = false, color = '#5E81A1' }) {
   const [ref, ANCHO] = useAncho();
   const [activo, setActivo] = useState(null);
   const { tope, paso } = escala(Math.max(0, ...datos.map((d) => d.valor)));
   const izq = 76;
   const abajo = 32;
-  const areaAlto = alto - abajo - 12;
   const ancho = (ANCHO - izq) / datos.length;
-  const y = (v) => 12 + areaAlto - (v / tope) * areaAlto;
+  // En 3D se deja lugar arriba y a la derecha para la profundidad de los prismas
+  const fondo = tresD ? Math.min(ancho * 0.22, 16) : 0;
+  const arriba = 12 + fondo;
+  const areaAlto = alto - abajo - arriba;
+  const y = (v) => arriba + areaAlto - (v / tope) * areaAlto;
+  const caras = { frente: color, lado: tono(color, -0.22), tapa: tono(color, 0.3) };
 
   return (
     <figure className={styles.figura} ref={ref}>
@@ -44,23 +60,41 @@ export function GraficoBarras({ datos, formato = String, alto = 260, etiqueta })
             </text>
           </g>
         ))}
+        {tresD && (
+          // Piso en perspectiva bajo las barras
+          <polygon
+            points={`${izq},${y(0)} ${izq + fondo},${y(0) - fondo} ${ANCHO},${y(0) - fondo} ${ANCHO - fondo},${y(0)}`}
+            fill={tono(color, 0.75)}
+            opacity="0.6"
+          />
+        )}
         {datos.map((d, i) => {
-          const x = izq + i * ancho + ancho * 0.18;
-          const w = ancho * 0.64;
+          const w = ancho * (tresD ? 0.5 : 0.64);
+          const x = izq + i * ancho + (ancho - w - fondo) / 2;
+          const yv = y(d.valor);
+          const y0 = y(0);
+          const atenuada = activo !== null && activo !== i;
           return (
             <g key={d.etiqueta} onMouseEnter={() => setActivo(i)} onMouseLeave={() => setActivo(null)}>
               <rect x={izq + i * ancho} y={0} width={ancho} height={alto} fill="transparent" />
-              <rect x={x} y={y(d.valor)} width={w} height={Math.max(0, y(0) - y(d.valor))} rx="4" className={styles.barra} opacity={activo === null || activo === i ? 1 : 0.6}>
-                <title>{`${d.etiqueta}: ${formato(d.valor)}`}</title>
-              </rect>
-              {d.destacado && <circle cx={x + w - 6} cy={y(d.valor) + 2} r="4" className={styles.puntoAcento} />}
+              <title>{`${d.etiqueta}: ${formato(d.valor)}`}</title>
+              {tresD ? (
+                <g opacity={atenuada ? 0.55 : 1} className={styles.prisma}>
+                  <polygon points={`${x + w},${yv} ${x + w + fondo},${yv - fondo} ${x + w + fondo},${y0 - fondo} ${x + w},${y0}`} fill={caras.lado} />
+                  <rect x={x} y={yv} width={w} height={Math.max(0, y0 - yv)} fill={caras.frente} />
+                  <polygon points={`${x},${yv} ${x + fondo},${yv - fondo} ${x + w + fondo},${yv - fondo} ${x + w},${yv}`} fill={caras.tapa} />
+                </g>
+              ) : (
+                <rect x={x} y={yv} width={w} height={Math.max(0, y0 - yv)} rx="4" fill={color} opacity={atenuada ? 0.6 : 1} className={styles.barra} />
+              )}
+              {d.destacado && <circle cx={x + w / 2 + fondo / 2} cy={yv - fondo / 2} r="4" className={styles.puntoAcento} />}
               <text x={x + w / 2} y={alto - 8} textAnchor="middle" className={`${styles.textoEje} ${d.destacado ? styles.fuerte : ''}`}>
                 {d.etiqueta}
               </text>
               {activo === i && (
                 <g>
-                  <rect x={x + w / 2 - 56} y={y(d.valor) - 34} width="112" height="26" rx="6" className={styles.globo} />
-                  <text x={x + w / 2} y={y(d.valor) - 16} textAnchor="middle" className={styles.textoGlobo}>
+                  <rect x={x + w / 2 - 56} y={yv - fondo - 34} width="112" height="26" rx="6" className={styles.globo} />
+                  <text x={x + w / 2} y={yv - fondo - 16} textAnchor="middle" className={styles.textoGlobo}>
                     {formato(d.valor)}
                   </text>
                 </g>
@@ -73,25 +107,64 @@ export function GraficoBarras({ datos, formato = String, alto = 260, etiqueta })
   );
 }
 
-/** Líneas por día. series: [{ nombre, valores, punteada? }] con el mismo largo que `etiquetas`. */
-export function GraficoLineas({ etiquetas, series, formato = String, alto = 260, etiqueta }) {
+/**
+ * Trazo suave que pasa por todos los puntos (curva cardinal convertida a Bézier cúbicas, sin desbordes).
+ * `tension` entre 0 (rectas) y 1.
+ */
+function trazoSuave(puntos, tension = 0.5) {
+  if (puntos.length < 2) return '';
+  const [x0, y0] = puntos[0];
+  let d = `M${x0},${y0}`;
+  for (let i = 0; i < puntos.length - 1; i += 1) {
+    const [xa, ya] = puntos[i - 1] ?? puntos[i];
+    const [xb, yb] = puntos[i];
+    const [xc, yc] = puntos[i + 1];
+    const [xd, yd] = puntos[i + 2] ?? puntos[i + 1];
+    // Los puntos de control no pasan de la altura de los extremos del tramo: la curva nunca se sale por
+    // arriba ni por abajo (por ejemplo, nunca baja de S/ 0 entre dos días sin ventas)
+    const piso = Math.max(yb, yc);
+    const techo = Math.min(yb, yc);
+    const acotar = (v) => Math.min(piso, Math.max(techo, v));
+    const c1 = [xb + ((xc - xa) / 6) * tension * 2, acotar(yb + ((yc - ya) / 6) * tension * 2)];
+    const c2 = [xc - ((xd - xb) / 6) * tension * 2, acotar(yc - ((yd - yb) / 6) * tension * 2)];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${xc.toFixed(1)},${yc.toFixed(1)}`;
+  }
+  return d;
+}
+
+/**
+ * Líneas por día con curvas suaves. series: [{ nombre, valores, punteada? }] con el mismo largo que `etiquetas`.
+ * La primera serie sólida lleva un relleno degradado debajo. La leyenda va abajo, con un cuadrito por serie.
+ * `tema`: 'claro' (sobre tarjeta blanca) u 'oscuro' (línea blanca y punteada gris sobre fondo oscuro).
+ */
+export function GraficoLineas({ etiquetas, series, formato = String, alto = 280, etiqueta, tema = 'claro' }) {
   const [ref, ANCHO] = useAncho();
   const [activo, setActivo] = useState(null);
+  const idDegradado = useId();
   const { tope, paso } = escala(Math.max(0, ...series.flatMap((s) => s.valores)));
-  const izq = 76;
-  const abajo = 32;
+  const izq = 64;
+  const abajo = 30;
   const areaAlto = alto - abajo - 12;
   const n = Math.max(1, etiquetas.length - 1);
-  const x = (i) => izq + 16 + (i / n) * (ANCHO - izq - 32);
+  const x = (i) => izq + 8 + (i / n) * (ANCHO - izq - 16);
   const y = (v) => 12 + areaAlto - (v / tope) * areaAlto;
   const cadaCuanto = Math.ceil(etiquetas.length / Math.max(4, Math.floor(ANCHO / 70)));
+  const oscuro = tema === 'oscuro';
+  const colorDe = (s) => (s.punteada ? (oscuro ? '#a3a3a3' : 'var(--color-deshabilitado)') : oscuro ? '#ffffff' : 'var(--color-primario)');
+  const principal = series.find((s) => !s.punteada);
 
   return (
-    <figure className={styles.figura} ref={ref}>
+    <figure className={`${styles.figura} ${oscuro ? styles.oscuro : ''}`} ref={ref}>
       <svg viewBox={`0 0 ${ANCHO} ${alto}`} className={styles.svg} role="img" aria-label={etiqueta}>
+        <defs>
+          <linearGradient id={idDegradado} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={oscuro ? '#ffffff' : 'var(--color-primario)'} stopOpacity={oscuro ? 0.16 : 0.22} />
+            <stop offset="100%" stopColor={oscuro ? '#ffffff' : 'var(--color-primario)'} stopOpacity="0" />
+          </linearGradient>
+        </defs>
         {[0, 1, 2, 3, 4].map((i) => (
           <g key={i}>
-            <line x1={izq} x2={ANCHO} y1={y(i * paso)} y2={y(i * paso)} className={i ? styles.guia : styles.eje} />
+            <line x1={izq} x2={ANCHO} y1={y(i * paso)} y2={y(i * paso)} className={styles.guiaLineas} />
             <text x={izq - 12} y={y(i * paso) + 4} className={styles.textoEje} textAnchor="end">
               {formato(i * paso)}
             </text>
@@ -100,16 +173,27 @@ export function GraficoLineas({ etiquetas, series, formato = String, alto = 260,
         {etiquetas.map(
           (e, i) =>
             i % cadaCuanto === 0 && (
-              <text key={e} x={x(i)} y={alto - 8} textAnchor="middle" className={styles.textoEje}>
+              <text key={e} x={x(i)} y={alto - 6} textAnchor="middle" className={styles.textoEje}>
                 {e}
               </text>
             ),
         )}
+        {principal && (
+          <path
+            d={`${trazoSuave(principal.valores.map((v, i) => [x(i), y(v)]))} L${x(principal.valores.length - 1)},${y(0)} L${x(0)},${y(0)} Z`}
+            fill={`url(#${idDegradado})`}
+          />
+        )}
         {series.map((s) => (
-          <g key={s.nombre}>
-            <polyline points={s.valores.map((v, i) => `${x(i)},${y(v)}`).join(' ')} className={s.punteada ? styles.lineaGris : styles.linea} />
-            {!s.punteada && s.valores.map((v, i) => <circle key={i} cx={x(i)} cy={y(v)} r={activo === i ? 5 : 3.5} className={styles.puntoLinea} />)}
-          </g>
+          <path
+            key={s.nombre}
+            d={trazoSuave(s.valores.map((v, i) => [x(i), y(v)]))}
+            fill="none"
+            stroke={colorDe(s)}
+            strokeWidth={s.punteada ? 1.75 : 2.25}
+            strokeDasharray={s.punteada ? '5 5' : undefined}
+            strokeLinecap="round"
+          />
         ))}
         {etiquetas.map((e, i) => (
           <rect
@@ -127,19 +211,31 @@ export function GraficoLineas({ etiquetas, series, formato = String, alto = 260,
         ))}
         {activo !== null && (
           <g pointerEvents="none">
-            <line x1={x(activo)} x2={x(activo)} y1={12} y2={y(0)} className={styles.guia} />
-            <rect x={Math.min(x(activo) - 60, ANCHO - 124)} y={4} width="120" height="26" rx="6" className={styles.globo} />
-            <text x={Math.min(x(activo), ANCHO - 64)} y={22} textAnchor="middle" className={styles.textoGlobo}>
-              {formato(series[0].valores[activo])}
+            <line x1={x(activo)} x2={x(activo)} y1={12} y2={y(0)} className={styles.guiaLineas} />
+            {series.map((s) => (
+              <circle key={s.nombre} cx={x(activo)} cy={y(s.valores[activo])} r="4" fill={colorDe(s)} className={styles.puntoActivo} />
+            ))}
+            <rect x={Math.min(Math.max(x(activo) - 70, izq), ANCHO - 140)} y={2} width="140" height="26" rx="6" className={styles.globo} />
+            <text x={Math.min(Math.max(x(activo), izq + 70), ANCHO - 70)} y={20} textAnchor="middle" className={styles.textoGlobo}>
+              {etiquetas[activo]}: {formato(series[0].valores[activo])}
             </text>
           </g>
         )}
       </svg>
+      <figcaption className={styles.leyendaLineas}>
+        {series.map((s) => (
+          <span key={s.nombre}>
+            <span className={styles.cuadrito} style={{ background: colorDe(s) }} />
+            {s.nombre}
+          </span>
+        ))}
+      </figcaption>
     </figure>
   );
 }
 
-const COLORES_DONA = ['#1E3A8A', '#2563EB', '#0284C7', '#F59E0B', '#4F46E5', '#64748B'];
+// Tonos apagados: primario, sus variantes, el oro Inti, el arena del gráfico 3D y gris
+const COLORES_DONA = ['#5E81A1', '#8FA9C0', '#3E5A73', '#F59E0B', '#BAAAA0', '#64748B'];
 
 /** Dona con leyenda. datos: [{ etiqueta, valor }] */
 export function GraficoDona({ datos, etiqueta }) {

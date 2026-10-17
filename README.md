@@ -75,5 +75,3 @@ Todas las vistas de `PROTOTIPO_WEB.md` están construidas y probadas contra los 
 | 4.1 a 4.14 (tienda) | Stitch, salvo las variantes de error 403 / sesión expirada / sin conexión (mismo diseño que la 404) |
 | 5.1 a 5.10 (panel) | Stitch, salvo **5.5 Stock** y el **detalle de venta** de la 5.7, armados con el texto de `PROTOTIPO_WEB.md` |
 
-La barra verde "Logeado!" es temporal: para quitarla, borrar `src/widgets/comprobacion-sesion/` y la ruta raíz
-marcada `TEMPORAL` en `src/app/router/router.jsx`.

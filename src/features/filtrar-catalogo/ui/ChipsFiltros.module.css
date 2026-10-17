@@ -13,7 +13,7 @@
   gap: 6px;
   height: 30px;
   padding: 0 6px 0 12px;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #c9d7e4;
   border-radius: var(--radio-pildora);
   background: var(--color-primario-suave);
   color: var(--color-primario);
@@ -32,5 +32,5 @@
 }
 
 .quitar:hover {
-  background: rgba(30, 58, 138, 0.12);
+  background: rgba(94, 129, 161, 0.16);
 }

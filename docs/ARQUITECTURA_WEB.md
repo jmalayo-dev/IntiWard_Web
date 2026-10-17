@@ -192,14 +192,14 @@ DSW_II_PROYECTO_WEB/
    │  ├─ detalle-venta/           línea de tiempo, tabla de productos y tarjeta del comprobante (cliente y admin)
    │  ├─ tabla-movimientos/       historial de stock con filtros
    │  ├─ hoja-comprobante/        hoja A4 del comprobante (vista 4.12 y panel lateral de la 5.8)
-   │  ├─ pantalla-error/          404, 403, sesión expirada y sin conexión (vista 4.14)
-   │  └─ comprobacion-sesion/     TEMPORAL: barra "Logeado! Tu usuario es…" con botón para quitar el token
+   │  └─ pantalla-error/          404, 403, sesión expirada y sin conexión (vista 4.14)
    │
    ├─ features/
    │  ├─ login/
    │  ├─ registro/
    │  ├─ logout/
    │  ├─ filtrar-catalogo/        categoría, marca y búsqueda en la URL
+   │  ├─ buscar-productos/        buscador con sugerencias y búsquedas recientes
    │  ├─ agregar-al-carrito/
    │  ├─ cambiar-cantidad-carrito/
    │  ├─ quitar-del-carrito/
@@ -306,6 +306,7 @@ Las **escrituras** (POST, PUT, DELETE) viven en la `api/` de la entidad como fun
 | `registro` | `POST /auth/registro` | Redirige al login con aviso de cuenta creada |
 | `logout` | — | Borra el token y la caché de react-query (hacia la tienda navega primero, para que la guarda de una página privada no mande al login) |
 | `filtrar-catalogo` | — | Escribe `categoria`, `marca`, `q`, `page` en la URL |
+| `buscar-productos` | `GET /productos?q=` (el mismo filtro del catálogo) | Buscador del encabezado con sugerencias (productos, categorías y marcas) y búsquedas recientes guardadas solo en el navegador (`localStorage`) |
 | `agregar-al-carrito` | `POST /carrito/items` | Invalida `carrito` |
 | `cambiar-cantidad-carrito` | `PUT /carrito/items/{idProducto}` | Invalida `carrito` |
 | `quitar-del-carrito` | `DELETE /carrito/items/{idProducto}` | Invalida `carrito` |
@@ -1086,7 +1087,7 @@ export const RUTAS = {
 | `/admin/reportes?desde&hasta` | `admin-reportes` | 5.9 | `RequiereRol ADMIN` |
 | `/admin/usuarios` | `admin-usuarios` | 5.10 | `RequiereRol ADMIN` |
 
-Las rutas de la tienda van dentro de `tienda-layout` y las de `/admin` dentro de `admin-layout`. Cada ruta del panel lleva en `handle` sus migas (`{ migas: [{ texto, a }] }`), que la barra superior del panel lee con `useMatches()`. Todo el árbol está envuelto, por ahora, en `widgets/comprobacion-sesion` (ruta raíz marcada `TEMPORAL`).
+Las rutas de la tienda van dentro de `tienda-layout` y las de `/admin` dentro de `admin-layout`. Cada ruta del panel lleva en `handle` sus migas (`{ migas: [{ texto, a }] }`); el panel las lee con `useMatches()` y usa la última como título de la pestaña de esa página.
 
 ### `src/app/router/guardas.jsx`
 

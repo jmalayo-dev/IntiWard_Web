@@ -1,41 +1,15 @@
 import { useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, NavLink, useLocation, useSearchParams } from 'react-router-dom';
 import { ContadorCarrito, useCarrito } from '@/entities/carrito';
 import { CategoriaIcono, ORDEN_CATEGORIAS } from '@/entities/categoria';
 import { useSesion } from '@/entities/sesion';
 import { usePerfil } from '@/entities/usuario';
+import { BuscadorProductos } from '@/features/buscar-productos';
 import { useLogout } from '@/features/logout';
 import { RUTAS } from '@/shared/config';
-import { GlowCard, Icono, Logo } from '@/shared/ui';
+import { Icono, Logo } from '@/shared/ui';
 import { MenuUsuario } from './MenuUsuario';
 import styles from './Encabezado.module.css';
-
-/**
- * Buscador con el diseño de GlowCard: vidrio translúcido y borde que brilla siguiendo al puntero
- * (tono dorado del Inti en la izquierda de la pantalla, que vira hacia el azul a la derecha).
- * Se monta con key = lo buscado, así muestra la búsqueda actual del catálogo.
- */
-function Buscador({ inicial = '', alBuscar, className = '' }) {
-  const [texto, setTexto] = useState(inicial);
-  const navigate = useNavigate();
-  return (
-    <form
-      role="search"
-      className={`${styles.buscador} ${className}`}
-      onSubmit={(e) => {
-        e.preventDefault();
-        const q = texto.trim();
-        navigate(q ? `${RUTAS.catalogo}?q=${encodeURIComponent(q)}` : RUTAS.catalogo);
-        alBuscar?.();
-      }}
-    >
-      <GlowCard customSize glowColor="orange" radio={12} className="h-11 w-full grid-rows-1 gap-0 rounded-xl p-0 shadow-[0_0.75rem_1.5rem_-1rem_black]">
-        <Icono nombre="buscar" className={styles.lupa} />
-        <input type="search" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Buscar cámaras, alarmas, cerraduras…" aria-label="Buscar productos" />
-      </GlowCard>
-    </form>
-  );
-}
 
 /** Barra superior de la tienda en sus 3 versiones (visitante, cliente y administrador) + barra de categorías. */
 export function Encabezado() {
@@ -61,7 +35,7 @@ export function Encabezado() {
             <Logo claro tamano={34} />
           </Link>
 
-          <Buscador key={buscado} inicial={buscado} className={styles.buscadorEscritorio} />
+          <BuscadorProductos key={buscado} inicial={buscado} className={styles.buscadorEscritorio} />
 
           <nav className={styles.acciones} aria-label="Cuenta">
             <NavLink to={RUTAS.catalogo} end className={claseEnlace}>
@@ -115,7 +89,7 @@ export function Encabezado() {
 
         {menuMovil && (
           <div className={styles.panelMovil} onClick={(e) => e.target.closest('a, button') && setMenuMovil(false)}>
-            <Buscador inicial={buscado} alBuscar={() => setMenuMovil(false)} />
+            <BuscadorProductos inicial={buscado} alBuscar={() => setMenuMovil(false)} className={styles.buscadorMovil} />
             <Link to={RUTAS.catalogo}>Catálogo</Link>
             {!estaAutenticado && (
               <>

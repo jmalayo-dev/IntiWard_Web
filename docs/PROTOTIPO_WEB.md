@@ -1229,7 +1229,6 @@ Los modales (desactivar producto, registrar entrada, ajuste de stock, nuevo usua
 
 | Vista | Qué cambia | Por qué |
 |---|---|---|
-| Todas | La barra verde "Logeado! Tu usuario es…" arriba de todo | Comprobación temporal de la sesión; se quita borrando `widgets/comprobacion-sesion` |
 | 4.3 | Una sola imagen, sin las 4 miniaturas | El producto tiene una sola `imagenUrl` |
 | 4.3 | La pestaña "Especificaciones" sale del campo `especificaciones` | Campo propuesto a Catálogo |
 | 4.4, 4.5, 5.10 | Ojo para mostrar la contraseña en todos los campos de contraseña | Coherencia con el login |

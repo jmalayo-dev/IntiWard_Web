@@ -7,8 +7,9 @@ export const productoKeys = {
   detalle: (id) => ['productos', 'detalle', id],
 };
 
-export const useProductos = (filtros) =>
-  useQuery({ queryKey: productoKeys.lista(filtros), queryFn: () => listarProductos(filtros), placeholderData: keepPreviousData });
+/** `habilitado: false` no pide nada (por ejemplo, el buscador mientras el texto es muy corto). */
+export const useProductos = (filtros, { habilitado = true } = {}) =>
+  useQuery({ queryKey: productoKeys.lista(filtros), queryFn: () => listarProductos(filtros), placeholderData: keepPreviousData, enabled: habilitado });
 
 export const useProducto = (id) =>
   useQuery({ queryKey: productoKeys.detalle(id), queryFn: () => obtenerProducto(id), enabled: Boolean(id) });

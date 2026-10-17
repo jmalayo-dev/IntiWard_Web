@@ -120,7 +120,7 @@ export function AdminResumenPage() {
 
       <div className={styles.fila}>
         <Tarjeta titulo="Ventas de los últimos 7 días" accion={<span className={styles.expresado}>Expresado en S/</span>}>
-          <GraficoBarras datos={ultimos7Dias(ventas, hoy)} formato={soles} etiqueta="Ventas de los últimos 7 días" />
+          <GraficoBarras datos={ultimos7Dias(ventas, hoy)} formato={soles} etiqueta="Ventas de los últimos 7 días" tresD color="#BAAAA0" />
         </Tarjeta>
         <Tarjeta titulo="Stock que necesita atención">
           {atencion.length ? (

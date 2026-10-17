@@ -7,7 +7,7 @@ export function Logo({ claro = false, tamano = 36 }) {
       <svg width={tamano} height={tamano} viewBox="0 0 36 36" fill="none" aria-hidden="true">
         <path
           d="M18 3L5 8V17C5 24.5 10.5 31.4 18 33C25.5 31.4 31 24.5 31 17V8L18 3Z"
-          fill="#1E3A8A"
+          fill="var(--color-primario)"
           stroke="#F59E0B"
           strokeWidth="2.5"
           strokeLinejoin="round"

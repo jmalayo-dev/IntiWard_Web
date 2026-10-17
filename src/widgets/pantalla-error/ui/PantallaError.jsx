@@ -35,11 +35,11 @@ const TIPOS = {
 function Ilustracion() {
   return (
     <svg width="96" height="96" viewBox="0 0 96 96" fill="none" aria-hidden="true">
-      <path d="M48 10L20 22V42C20 60.5 32 74.5 48 78C64 74.5 76 60.5 76 42V22L48 10Z" stroke="#1E3A8A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M48 10L20 22V42C20 60.5 32 74.5 48 78C64 74.5 76 60.5 76 42V22L48 10Z" stroke="var(--color-primario)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="48" cy="40" r="8" fill="#F59E0B" />
       <path d="M48 26V29M48 51V54M34 40H37M59 40H62M38 30L40 32M56 48L58 50M38 50L40 48M56 30L58 32" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="56" cy="54" r="14" stroke="#1E3A8A" strokeWidth="3.5" fill="#F8FAFC" fillOpacity="0.85" />
-      <line x1="66.5" y1="64.5" x2="80" y2="78" stroke="#1E3A8A" strokeWidth="4.5" strokeLinecap="round" />
+      <circle cx="56" cy="54" r="14" stroke="var(--color-primario)" strokeWidth="3.5" fill="#F8FAFC" fillOpacity="0.85" />
+      <line x1="66.5" y1="64.5" x2="80" y2="78" stroke="var(--color-primario)" strokeWidth="4.5" strokeLinecap="round" />
     </svg>
   );
 }

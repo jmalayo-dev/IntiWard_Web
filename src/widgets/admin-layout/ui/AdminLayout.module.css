@@ -1,41 +1,117 @@
+/*
+ * Marco del panel con la referencia de diseño: todo sobre un gris muy claro, barra lateral sin fondo propio
+ * y el contenido en una hoja blanca redondeada; la pestaña activa se funde con la hoja.
+ */
 .panel {
+  /* Primario del administrador; la tienda usa el de tokens.css (#7b97b2) */
+  --color-primario: #5e81a1;
+  --color-primario-hover: #4d6d8a;
+  --color-primario-suave: #e4ecf3;
+
+  --marco: #f7f7f8;
+  --linea: #ebebed;
+  --texto-menu: #52525b;
+  --icono-menu: #71717a;
+  --activo: #ececee;
+  --ancho-lateral: 272px;
+
   display: flex;
   min-height: 100vh;
-  background: var(--color-fondo);
+  background: var(--marco);
 }
 
+.colapsado {
+  --ancho-lateral: 76px;
+}
+
+/* ---------- Barra lateral ---------- */
 .lateral {
   position: sticky;
   top: 0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 260px;
+  width: var(--ancho-lateral);
   height: 100vh;
-  background: var(--color-admin-barra);
-  color: var(--color-admin-texto);
-  overflow-y: auto;
+  background: var(--marco);
+  border-right: 1px solid var(--linea);
+  transition: width 0.2s ease;
+  overflow: hidden;
 }
 
 .marca {
-  display: grid;
-  gap: 4px;
-  padding: var(--esp-5, 20px) var(--esp-6);
-  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  height: 68px;
+  padding: 0 var(--esp-3) 0 var(--esp-4);
+  border-bottom: 1px solid var(--linea);
 }
 
-.etiqueta {
-  padding-left: 46px;
-  margin-top: -10px;
+.marcaEnlace {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-width: 0;
+  color: var(--color-texto);
+}
+
+/* Cuadro oscuro con el escudo, como el monograma de la referencia (el texto del logo se oculta) */
+.marcaIcono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--color-texto);
+}
+
+.marcaIcono > span > span {
+  display: none;
+}
+
+.marcaTexto {
+  display: grid;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.marcaTexto strong {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.marcaTexto span {
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #94a3b8;
+  color: var(--icono-menu);
+}
+
+.botonIcono {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: var(--radio-control);
+  background: none;
+  color: var(--icono-menu);
+  cursor: pointer;
+}
+
+.botonIcono:hover {
+  background: var(--activo);
+  color: var(--color-texto);
 }
 
 .menu {
   flex: 1;
+  overflow-y: auto;
   padding: var(--esp-4) var(--esp-3);
 }
 
@@ -44,12 +120,13 @@
 }
 
 .grupo {
-  padding: 0 var(--esp-3) var(--esp-2);
-  font-size: 12px;
+  padding: var(--esp-1) var(--esp-3) 6px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #a1a1aa;
+  white-space: nowrap;
 }
 
 .opcion {
@@ -57,61 +134,121 @@
   display: flex;
   align-items: center;
   gap: var(--esp-3);
-  width: 100%;
-  padding: 9px var(--esp-3);
-  border: 0;
-  border-radius: var(--radio-control);
-  background: none;
-  color: var(--color-admin-texto);
+  height: 44px;
+  padding: 0 var(--esp-3);
+  border-radius: 10px;
+  color: var(--texto-menu);
   font-size: 15px;
   font-weight: 500;
-  text-align: left;
-  cursor: pointer;
+  white-space: nowrap;
 }
 
 .opcion svg {
-  color: #94a3b8;
   flex-shrink: 0;
+  color: var(--icono-menu);
 }
 
 .opcion:hover {
-  background: #1e293b;
-  color: #ffffff;
+  background: var(--activo);
+  color: var(--color-texto);
 }
 
 .activa,
 .activa:hover {
-  background: var(--color-primario);
-  color: #ffffff;
+  background: var(--activo);
+  color: var(--color-texto);
+  font-weight: 600;
 }
 
 .activa svg {
-  color: #ffffff;
+  color: var(--color-texto);
 }
 
+/* Barra negra a la izquierda de la opción activa */
 .activa::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  border-radius: 3px 0 0 3px;
-  background: var(--color-acento);
+  left: -10px;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--color-texto);
 }
 
-.abajo {
+.cuenta {
+  padding: var(--esp-3);
+  border-top: 1px solid var(--linea);
+}
+
+.cuentaBoton {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  width: 100%;
+  padding: var(--esp-2);
+  border: 0;
+  border-radius: 12px;
+  background: #f0f0f2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cuentaBoton:hover {
+  background: var(--activo);
+}
+
+.cuentaTexto {
   display: grid;
-  gap: 2px;
-  padding: var(--esp-4) var(--esp-3) var(--esp-6);
-  border-top: 1px solid #1e293b;
+  min-width: 0;
+  line-height: 1.25;
 }
 
+.cuentaTexto strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cuentaTexto span {
+  font-size: 12px;
+  color: var(--icono-menu);
+}
+
+/* Colapsado: solo íconos */
+.colapsado .marca {
+  flex-direction: column;
+  justify-content: center;
+  height: auto;
+  padding: var(--esp-3) 0;
+}
+
+.colapsado .marcaTexto,
+.colapsado .grupo,
+.colapsado .opcionTexto,
+.colapsado .cuentaTexto {
+  display: none;
+}
+
+.colapsado .opcion {
+  justify-content: center;
+  padding: 0;
+}
+
+.colapsado .cuentaBoton {
+  justify-content: center;
+  background: none;
+}
+
+/* ---------- Contenido ---------- */
 .principal {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
+  padding-right: var(--esp-3);
 }
 
 .superior {
@@ -119,82 +256,109 @@
   top: 0;
   z-index: 20;
   display: flex;
-  align-items: center;
-  gap: var(--esp-4);
-  height: 64px;
-  padding: 0 var(--esp-8);
-  background: var(--color-superficie);
-  border-bottom: 1px solid var(--color-borde);
+  align-items: flex-end;
+  gap: var(--esp-2);
+  height: 68px;
+  padding-left: var(--esp-3);
+  background: var(--marco);
 }
 
-.migas {
+.pestanas {
   flex: 1;
   min-width: 0;
-}
-
-.derecha {
   display: flex;
   align-items: center;
-  gap: var(--esp-6);
+  gap: 2px;
+  height: 52px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.campana {
-  position: relative;
+.pestana {
   display: flex;
-  padding: 6px;
-  border-radius: 50%;
-  color: var(--color-texto-secundario);
+  align-items: center;
+  gap: var(--esp-2);
+  flex-shrink: 0;
+  height: 100%;
+  max-width: 240px;
+  padding: 0 var(--esp-4);
+  border-radius: 14px 14px 0 0;
+  color: var(--texto-menu);
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.campana:hover {
-  background: var(--color-fondo);
-  color: var(--color-primario);
+.pestana:hover {
+  background: var(--activo);
+  color: var(--color-texto);
+}
+
+/* La pestaña activa es blanca y se une con la hoja de abajo */
+.pestanaActiva,
+.pestanaActiva:hover {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-weight: 600;
+}
+
+.pestanaTexto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cerrarPestana {
+  display: inline-flex;
+  margin-right: -6px;
+  padding: 3px;
+  border-radius: 6px;
+  color: var(--icono-menu);
+  opacity: 0;
+}
+
+.pestana:hover .cerrarPestana,
+.pestanaActiva .cerrarPestana,
+.cerrarPestana:focus-visible {
+  opacity: 1;
+}
+
+.cerrarPestana:hover {
+  background: #e4e4e7;
+  color: var(--color-texto);
+}
+
+.herramientas {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  align-self: center;
+  padding-right: var(--esp-2);
 }
 
 .punto {
   position: absolute;
-  top: 4px;
-  right: 5px;
+  top: 6px;
+  right: 7px;
   width: 8px;
   height: 8px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--marco);
   border-radius: 50%;
   background: var(--color-error);
   box-sizing: content-box;
 }
 
-.quien {
-  display: flex;
-  align-items: center;
-  gap: var(--esp-3);
-  padding-left: var(--esp-6);
-  border-left: 1px solid var(--color-borde);
-}
-
-.quienTexto {
-  display: grid;
-  line-height: 1.25;
-  font-size: var(--texto-pequeno);
-}
-
-.quienTexto span {
-  font-size: 13px;
-  color: var(--color-texto-secundario);
-}
-
-.contenido {
+.hoja {
   flex: 1;
+  margin-bottom: var(--esp-3);
   padding: var(--esp-8);
+  background: var(--color-superficie);
+  border: 1px solid var(--linea);
+  border-radius: 0 18px 18px 18px;
 }
 
 .botonMenu {
   display: none;
-  padding: 6px;
-  border: 0;
-  border-radius: var(--radio-control);
-  background: none;
-  color: var(--color-texto);
-  cursor: pointer;
+  align-self: center;
 }
 
 .velo {
@@ -202,6 +366,16 @@
 }
 
 @media (max-width: 1024px) {
+  .panel,
+  .colapsado {
+    --ancho-lateral: 272px;
+  }
+  .colapsado .marcaTexto,
+  .colapsado .grupo,
+  .colapsado .opcionTexto,
+  .colapsado .cuentaTexto {
+    display: revert;
+  }
   .lateral {
     position: fixed;
     left: 0;
@@ -217,29 +391,19 @@
     position: fixed;
     inset: 0;
     z-index: 44;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(15, 23, 42, 0.4);
   }
   .botonMenu {
-    display: flex;
+    display: inline-flex;
+  }
+  .principal {
+    padding-right: var(--esp-2);
   }
   .superior {
-    padding: 0 var(--esp-4);
+    padding-left: var(--esp-2);
   }
-  .contenido {
+  .hoja {
     padding: var(--esp-6) var(--esp-4);
-  }
-}
-
-@media (max-width: 640px) {
-  .quienTexto,
-  .migas {
-    display: none;
-  }
-  .quien {
-    padding-left: 0;
-    border-left: 0;
-  }
-  .derecha {
-    margin-left: auto;
+    border-radius: 0 14px 14px 14px;
   }
 }

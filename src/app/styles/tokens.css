@@ -1,9 +1,11 @@
 /* Sistema de diseño de PROTOTIPO_WEB.md §1 */
 :root {
   /* Paleta */
-  --color-primario: #1e3a8a;
-  --color-primario-hover: #1e40af;
-  --color-primario-suave: #dbeafe;
+  /* Primario del cliente (tienda, login, registro, compra). El panel de administración usa #5e81a1:
+     lo sobrescribe widgets/admin-layout */
+  --color-primario: #3C5267;
+  --color-primario-hover: #67839e;
+  --color-primario-suave: #e8eef4;
   --color-acento: #f59e0b;
   --color-acento-hover: #d97706;
   --color-acento-suave: #fef3c7;
@@ -23,8 +25,8 @@
   --color-advertencia-fondo: #fef3c7;
   --color-error: #b91c1c;
   --color-error-fondo: #fee2e2;
-  --color-info: #0369a1;
-  --color-info-fondo: #e0f2fe;
+  --color-info: #4a7090;
+  --color-info-fondo: #e6eef5;
 
   /* Tipografía */
   --fuente: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;

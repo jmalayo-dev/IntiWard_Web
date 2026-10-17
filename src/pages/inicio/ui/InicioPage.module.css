@@ -80,9 +80,9 @@
   align-items: center;
   justify-content: center;
   aspect-ratio: 4 / 3;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #c9d7e4;
   border-radius: var(--radio-tarjeta);
-  background: linear-gradient(135deg, #eff6ff, var(--color-primario-suave));
+  background: linear-gradient(135deg, #eef3f7, var(--color-primario-suave));
   overflow: hidden;
 }
 
@@ -154,7 +154,7 @@
 }
 
 .categoria:hover {
-  border-color: #bfdbfe;
+  border-color: #c9d7e4;
   box-shadow: var(--sombra-tarjeta-hover);
 }
 

@@ -19,25 +19,6 @@
   color: var(--color-texto-secundario);
 }
 
-.leyenda {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--esp-2);
-  font-size: 13px;
-  color: var(--color-texto-secundario);
-}
-
-.lineaAzul,
-.lineaGris {
-  display: inline-block;
-  width: 20px;
-  margin-left: var(--esp-2);
-  border-top: 2px solid var(--color-primario);
-}
-
-.lineaGris {
-  border-top: 2px dashed var(--color-deshabilitado);
-}
 
 .fila {
   display: grid;

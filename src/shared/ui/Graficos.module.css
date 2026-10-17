@@ -29,8 +29,8 @@
   color: var(--color-texto);
 }
 
-.barra {
-  fill: var(--color-primario);
+.barra,
+.prisma {
   transition: opacity 0.15s;
 }
 
@@ -48,23 +48,8 @@
   fill: #ffffff;
 }
 
-.linea {
-  fill: none;
-  stroke: var(--color-primario);
-  stroke-width: 2.5;
-  stroke-linejoin: round;
-}
 
-.lineaGris {
-  fill: none;
-  stroke: var(--color-deshabilitado);
-  stroke-width: 2;
-  stroke-dasharray: 6 5;
-}
 
-.puntoLinea {
-  fill: var(--color-primario);
-}
 
 .dona {
   display: flex;
@@ -132,4 +117,62 @@
 
 .gris {
   background: #64748b;
+}
+
+/* ---------- Gráfico de líneas ---------- */
+.guiaLineas {
+  stroke: var(--color-borde);
+  stroke-dasharray: 3 4;
+}
+
+.puntoActivo {
+  stroke: var(--color-superficie);
+  stroke-width: 2;
+}
+
+.leyendaLineas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--esp-6);
+  margin-top: var(--esp-3);
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+.leyendaLineas > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.cuadrito {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Tema oscuro (referencia del reporte): grilla tenue, textos grises y globo claro */
+.oscuro .guiaLineas {
+  stroke: #333333;
+}
+
+.oscuro .textoEje {
+  fill: #9ca3af;
+}
+
+.oscuro .puntoActivo {
+  stroke: #1a1a1a;
+}
+
+.oscuro .globo {
+  fill: #f5f5f5;
+}
+
+.oscuro .textoGlobo {
+  fill: #171717;
+}
+
+.oscuro .leyendaLineas {
+  color: #d4d4d4;
 }

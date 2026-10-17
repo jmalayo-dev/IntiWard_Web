@@ -80,14 +80,7 @@ export function AdminReportesPage() {
             />
           </div>
 
-          <Tarjeta
-            titulo="Ventas por día"
-            accion={
-              <span className={styles.leyenda}>
-                <span className={styles.lineaAzul} /> Este período <span className={styles.lineaGris} /> Período anterior
-              </span>
-            }
-          >
+          <Tarjeta titulo="Ventas por día">
             {reporte.cantidad || reporteAnterior?.cantidad ? (
               <GraficoLineas
                 etiqueta="Ventas por día"
