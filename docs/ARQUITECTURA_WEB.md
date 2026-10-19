@@ -1,10 +1,10 @@
 # Arquitectura del cliente web · React + Vite (JavaScript) con FSD
 
-Este documento define **cómo se construye la base del cliente web**: tecnologías, estructura de carpetas con **Feature-Sliced Design (FSD)**, dónde viven los **endpoints** del backend, dónde viven los **mocks** y cómo se pasa de los mocks al backend real, servicio por servicio.
+Este documento define **cómo se construye la base del cliente web**: tecnologías, estructura de carpetas con **Feature-Sliced Design (FSD)**, dónde viven los **endpoints** del backend y cómo se conecta con él.
 
 No trata el diseño visual (eso es [`PROTOTIPO_WEB.md`](PROTOTIPO_WEB.md)) ni las reglas del negocio (eso es la sección "Guía de negocio y casos de uso" del [`README` del backend](../../DSW_II_PROYECTO/README.md#guía-de-negocio-y-casos-de-uso)). Aquí solo está **la arquitectura**.
 
-> **Dónde vive:** el cliente web es su propio proyecto, `DSW_II_PROYECTO_WEB/` (la raíz es la app de Vite, no una carpeta `web/` dentro del backend). Este documento y `PROTOTIPO_WEB.md` viven en su carpeta `docs/` y describen lo que está construido. **Estado (18/10/2026):** las 24 vistas están hechas y conectadas al backend real; los mocks quedan para trabajar sin backend.
+> **Dónde vive:** el cliente web es su propio proyecto, `DSW_II_PROYECTO_WEB/` (la raíz es la app de Vite, no una carpeta `web/` dentro del backend). Este documento y `PROTOTIPO_WEB.md` viven en su carpeta `docs/` y describen lo que está construido. **Estado (18/10/2026):** las 24 vistas están hechas y conectadas al backend real. **19/10/2026:** se eliminaron los mocks (MSW); la web siempre usa el backend real.
 
 ---
 
@@ -19,7 +19,6 @@ No trata el diseño visual (eso es [`PROTOTIPO_WEB.md`](PROTOTIPO_WEB.md)) ni la
 | Llamadas HTTP | `axios`, **una sola instancia** en `shared/api/http.js` | Un solo lugar para el token, la URL base y el formato de error |
 | Datos del servidor | `@tanstack/react-query` | Caché, reintentos, estados de carga y error sin escribirlos a mano |
 | Sesión | Contexto de React en `entities/sesion` + token en `localStorage` | El JWT ya trae `rol` e `idUsuario`: no hace falta otra librería |
-| Mocks | **MSW** (Mock Service Worker) en `shared/mocks/` | Intercepta las peticiones reales en el navegador: el código no sabe si habla con un mock o con el gateway |
 | Estilos | **CSS Modules** + variables de `tokens.css`; **Tailwind CSS v4** para componentes copiados de catálogos (Aceternity UI, shadcn/ui), sin su reset (Preflight) y en capas `@layer` | Las vistas propias siguen en CSS Modules; Tailwind permite pegar componentes externos sin traducirlos. Si chocan, gana el CSS Module (no tiene capa) |
 | Puerta al backend | **Solo el gateway** (`:8080`), siempre con el prefijo `/api` | El navegador nunca habla con un microservicio directo |
 
@@ -30,7 +29,6 @@ react, react-dom              (las trae la plantilla)
 react-router-dom
 axios
 @tanstack/react-query
-msw                           (solo desarrollo)
 lottie-web                    (animación del 404; se usa la versión light y se descarga solo al mostrarla)
 tailwindcss, @tailwindcss/vite (v4; configurado en src/app/styles/tailwind.css)
 clsx, tailwind-merge          (helper cn de shadcn/ui, en shared/lib/cn.js)
@@ -46,11 +44,6 @@ No se agrega nada más sin acordarlo (Tailwind y lottie-web se acordaron el 17/1
 Navegador (localhost:5173)
    │  fetch /api/productos?page=0
    ▼
-┌───────────────────────────────┐
-│ ¿Mocks activos para catálogo? │── sí ──▶ MSW responde desde shared/mocks (nunca sale del navegador)
-└──────────────┬────────────────┘
-               no
-               ▼
 Proxy de Vite: quita "/api" ──▶ http://localhost:8080/productos?page=0 ──▶ gateway ──▶ ms-catalogo
 ```
 
@@ -80,12 +73,9 @@ npm create vite@latest DSW_II_PROYECTO_WEB -- --template react
 cd DSW_II_PROYECTO_WEB
 npm install
 npm install react-router-dom axios @tanstack/react-query
-npm install -D msw
-npx msw init public/ --save
 ```
 
 - `--template react` es la plantilla **JavaScript** (la de TypeScript es `react-ts`; no usarla).
-- `npx msw init` crea `public/mockServiceWorker.js`. Se sube al repo y no se edita.
 - La plantilla trae su `.gitignore` con `node_modules`, `dist` y `*.local`.
 
 Después de crear el proyecto:
@@ -117,7 +107,7 @@ pages      ↓  una carpeta por vista (las de PROTOTIPO_WEB.md)
 widgets    ↓  bloques grandes y autónomos: encabezado, menú del panel, grilla de productos
 features   ↓  una acción del usuario: iniciar sesión, agregar al carrito, confirmar compra
 entities   ↓  conceptos del negocio: producto, venta, comprobante… (datos, consultas y su UI mínima)
-shared        sin negocio: cliente HTTP, endpoints, mocks, utilidades, componentes base
+shared        sin negocio: cliente HTTP, endpoints, utilidades, componentes base
 ```
 
 | Pregunta | Capa |
@@ -140,12 +130,10 @@ DSW_II_PROYECTO_WEB/
 ├─ .env.development               valores comunes de desarrollo (se sube)
 ├─ .env.development.local         valores personales (NO se sube)
 ├─ public/
-│  ├─ mockServiceWorker.js        generado por msw init
-│  ├─ productos/                  ilustraciones de producto (salen de los diseños de Stitch); las usa el mock como imagenUrl
 │  └─ ilustraciones/hero.svg      imagen del hero del inicio
 └─ src/
    ├─ app/
-   │  ├─ main.jsx                 enciende los mocks (si corresponde) y monta la app
+   │  ├─ main.jsx                 monta la app (y da de baja el service worker de los mocks viejos)
    │  ├─ App.jsx                  providers + router
    │  ├─ providers/
    │  │  ├─ QueryProvider.jsx
@@ -254,7 +242,6 @@ DSW_II_PROYECTO_WEB/
       │                           MensajeError, Icono (Lucide inline), Logo y gráficos SVG (barras, líneas, dona, progreso)
       │  └─ externos/             componentes copiados de catálogos (equivale a components/ui de shadcn), en Tailwind:
       │                           AuroraBackground (Aceternity UI) y GlowCard (spotlight-card de 21st.dev)
-      └─ mocks/                   ★ todo lo simulado (sección 7)
 ```
 
 ### Segmentos dentro de cada slice
@@ -374,31 +361,14 @@ Vite solo expone las variables que empiezan con `VITE_`. Ninguna es secreta: tod
 ```properties
 # URL base del backend vista desde el navegador (el proxy la manda al gateway)
 VITE_API_URL=/api
-# Servicios que responden con mocks. Vacío = todo contra el backend real (gateway en localhost:8080).
-# Para trabajar sin backend: VITE_MOCKS=auth,catalogo,inventario,pedidos,comprobantes en .env.development.local
-VITE_MOCKS=
-# true: el checkout simulado responde 503 (para probar la vista 4.9)
-VITE_MOCK_FALLA_COMPROBANTE=false
 ```
 
-`.env.development.local` (personal, no se sube): para trabajar sin backend, con los servicios simulados.
-
-```properties
-VITE_MOCKS=auth,catalogo,inventario,pedidos,comprobantes
-```
+`.env.production` (se sube): `VITE_API_URL=https://intiguard-gateway.onrender.com`, el gateway publicado en Render.
 
 ### `src/shared/config/env.js`
 
 ```js
 export const API_URL = import.meta.env.VITE_API_URL ?? '/api';
-
-/** Servicios simulados con MSW, por ejemplo ['auth', 'catalogo']. Vacío = todo real. */
-export const SERVICIOS_MOCK = (import.meta.env.VITE_MOCKS ?? '')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
-
-export const MOCK_FALLA_COMPROBANTE = import.meta.env.VITE_MOCK_FALLA_COMPROBANTE === 'true';
 ```
 
 ---
@@ -409,12 +379,12 @@ Hay **dos catálogos de rutas** y ninguno se escribe a mano en otro lugar:
 
 | Archivo | Qué contiene | Quién lo usa |
 |---|---|---|
-| `src/shared/api/endpoints.js` | Las rutas **del backend** (gateway) | Las `api/` de cada entidad y los handlers de los mocks |
+| `src/shared/api/endpoints.js` | Las rutas **del backend** (gateway) | Las `api/` de cada entidad |
 | `src/shared/config/rutas.js` | Las rutas **del navegador** (páginas) | El router, los `<Link>` y las redirecciones |
 
 ### `src/shared/api/endpoints.js`
 
-Es el espejo de las rutas públicas del gateway (`ms-gateway/src/main/resources/application.yml`). **No incluye las rutas internas.** El servicio dueño va al lado de cada grupo; los mocks lo usan para saber qué simular.
+Es el espejo de las rutas públicas del gateway (`ms-gateway/src/main/resources/application.yml`). **No incluye las rutas internas.** El servicio dueño va al lado de cada grupo.
 
 ```js
 /**
@@ -827,195 +797,29 @@ Los nombres y la foto del usuario no están en el token: el encabezado los pide 
 
 ---
 
-## 7. Dónde viven los mocks
-
-Todo lo simulado está en **`src/shared/mocks/`**. Ningún otro archivo del proyecto sabe que existen: los mocks interceptan las mismas rutas de `ENDPOINTS` que usa el código real.
-
-```
-src/shared/mocks/
-├─ browser.js                 arranca MSW solo con los servicios de VITE_MOCKS
-├─ handlers/                  un archivo por microservicio, igual que el backend
-│  ├─ auth.js                 /auth/*, /usuarios/*
-│  ├─ catalogo.js             /productos/*, /marcas, /categorias
-│  ├─ inventario.js           /stock/*, /movimientos
-│  ├─ pedidos.js              /carrito/*, /pedidos/*
-│  ├─ comprobantes.js         /comprobantes/*
-│  └─ index.js                { auth, catalogo, inventario, pedidos, comprobantes }
-├─ db/                        datos en memoria (se reinician al recargar la página)
-│  ├─ usuarios.js
-│  ├─ marcas.js
-│  ├─ categorias.js
-│  ├─ productos.js
-│  ├─ stock.js
-│  ├─ movimientos.js
-│  ├─ carritos.js
-│  ├─ ventas.js
-│  └─ comprobantes.js
-└─ lib/
-   ├─ respuestas.js           error() con el formato ApiError, ruta() con el prefijo /api
-   ├─ token.js                genera un JWT falso con sub, rol, idUsuario, iat y exp
-   └─ sesion.js               lee el usuario del header Authorization; responde 401 / 403
-```
-
-### Reglas de los mocks
-
-1. **Mismas rutas** (las de `ENDPOINTS`), **mismos códigos HTTP** y **mismo formato** de respuesta y de error que el backend.
-2. **Mismas reglas de negocio** que la guía del README: login con bloqueo al 5.º intento, solo productos activos en la tienda, carrito de un solo producto por línea, checkout todo o nada, cada cliente ve solo lo suyo, numeración B001/F001 correlativa.
-3. **Mismas rutas protegidas:** sin token → 401; CLIENTE en ruta de ADMIN → 403.
-4. **Datos semilla = los de `PROTOTIPO_WEB.md` §3** (8 productos + uno inactivo, Ana Torres, pedido #00042 con 2 cámaras bala). Además, `db/ventas.js` genera con semilla fija un historial de ventas desde el 01/09/2026 hasta hoy, y `db/comprobantes.js` y `db/movimientos.js` salen de esas ventas (numeración B001/F001 en orden de fecha y stock inicial calculado para que cuadre con `db/stock.js`). Por eso la boleta del #00042 no es la B001-00000001 del prototipo.
-5. **Latencia simulada** de 300 ms, para ver los estados de carga.
-6. **Nunca se importan desde `features`, `entities` ni `pages`.** Solo `app/main.jsx` los enciende.
-7. **No llegan a producción.** `main.jsx` los enciende solo en desarrollo o, para una demo publicada (por ejemplo en Render), con `VITE_MOCKS_EN_BUILD=true` al hacer el build; sin esa variable, Vite descarta todo su código. En la demo, si no se define `VITE_MOCKS`, se simulan los cinco servicios.
-
-### Usuarios de los mocks
-
-Solo existen en el navegador, no en Aiven:
-
-| Correo | Contraseña | Rol |
-|---|---|---|
-| `ana.torres@gmail.com` | `cliente123` | CLIENTE |
-| `admin@intiguard.pe` | `admin1234` | ADMIN |
-| `luis.ramos@hotmail.com` | `cliente123` | CLIENTE bloqueado por intentos (10 min desde que carga la página) |
-| `pedro.quispe@gmail.com` | `cliente123` | CLIENTE inactivo |
-
-Hay otros clientes (Carla Díaz, Jorge Salas de Seguridad Integral del Sur, María Fernández, Diego Huamán) que solo aparecen en las ventas. **Recargar la página reinicia todos los datos**: para probar un flujo largo, navegar dentro de la app.
-
-### `src/shared/mocks/browser.js`
-
-```js
-import { setupWorker } from 'msw/browser';
-import { SERVICIOS_MOCK } from '@/shared/config/env';
-import * as handlers from './handlers';
-
-const activos = SERVICIOS_MOCK.flatMap((servicio) => handlers[servicio] ?? []);
-
-export const worker = setupWorker(...activos);
-export const hayMocks = activos.length > 0;
-```
-
-### `src/shared/mocks/lib/respuestas.js`
-
-```js
-import { HttpResponse } from 'msw';
-import { API_URL } from '@/shared/config/env';
-
-/** Ruta del mock = prefijo /api + ruta de ENDPOINTS. */
-export const ruta = (endpoint) => `${API_URL}${endpoint}`;
-
-/** Ruta con parámetro en formato MSW: rutaParam(ENDPOINTS.productos.detalle) → /api/productos/:id */
-export const rutaParam = (fn, nombre = 'id') => ruta(fn(`:${nombre}`));
-
-const FRASES = { 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 409: 'Conflict', 423: 'Locked', 503: 'Service Unavailable' };
-
-/** Error con el mismo formato que el ApiError del backend. */
-export function error(status, mensaje, request, detalles = []) {
-  return HttpResponse.json(
-    { fecha: new Date().toISOString().slice(0, 19), status, error: FRASES[status], mensaje, ruta: new URL(request.url).pathname.replace(API_URL, ''), detalles },
-    { status },
-  );
-}
-```
-
-### `src/shared/mocks/lib/token.js`
-
-```js
-const base64Url = (obj) => btoa(JSON.stringify(obj)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
-
-/** JWT falso: la firma no vale, pero los claims son los mismos que emite ms-auth. */
-export function crearTokenFalso(usuario, minutos = 60) {
-  const ahora = Math.floor(Date.now() / 1000);
-  const claims = { sub: usuario.correo, rol: usuario.rol, idUsuario: usuario.id, iat: ahora, exp: ahora + minutos * 60 };
-  return `${base64Url({ alg: 'HS256' })}.${base64Url(claims)}.firma-de-mock`;
-}
-```
-
-### Ejemplo de handler: `src/shared/mocks/handlers/auth.js`
-
-```js
-import { delay, http, HttpResponse } from 'msw';
-import { ENDPOINTS } from '@/shared/api/endpoints';
-import { usuarios } from '../db/usuarios';
-import { error, ruta } from '../lib/respuestas';
-import { crearTokenFalso } from '../lib/token';
-
-const MAX_INTENTOS = 5;
-const MINUTOS_BLOQUEO = 15;
-// Textos exactos de CredencialesInvalidasException y CuentaBloqueadaException (ms-auth)
-const MENSAJE_401 = 'Credenciales inválidas';
-const MENSAJE_423 = 'Cuenta bloqueada temporalmente por intentos fallidos. Intente más tarde';
-
-export const auth = [
-  http.post(ruta(ENDPOINTS.auth.login), async ({ request }) => {
-    await delay(300);
-    const { correo, password } = await request.json();
-    const usuario = usuarios.find((u) => u.correo === correo);
-    if (!usuario) return error(401, MENSAJE_401, request);
-
-    if (usuario.bloqueadoHasta) {
-      if (usuario.bloqueadoHasta > Date.now()) return error(423, MENSAJE_423, request);
-      // El bloqueo ya venció: se empieza de cero
-      usuario.bloqueadoHasta = null;
-      usuario.intentosFallidos = 0;
-    }
-
-    if (!usuario.activo) return error(401, MENSAJE_401, request);
-
-    if (usuario.clave !== password) {
-      usuario.intentosFallidos += 1;
-      if (usuario.intentosFallidos >= MAX_INTENTOS) {
-        usuario.bloqueadoHasta = Date.now() + MINUTOS_BLOQUEO * 60_000;
-        return error(423, MENSAJE_423, request);
-      }
-      return error(401, MENSAJE_401, request);
-    }
-
-    usuario.intentosFallidos = 0;
-    return HttpResponse.json({ token: crearTokenFalso(usuario), tipo: 'Bearer', expiraEnMinutos: 60, rol: usuario.rol });
-  }),
-];
-```
-
-El orden de las validaciones y los textos son los mismos de `AuthService.login` en ms-auth: si el backend los cambia, se cambian aquí.
-
-### Qué debe simular cada handler
-
-| Handler | Comportamientos obligatorios |
-|---|---|
-| `auth` | Login con bloqueo (401 genérico, 423 al 5.º intento) · registro con rol CLIENTE y 409 si el correo existe · usuarios solo para ADMIN, desactivar en vez de borrar |
-| `catalogo` | Lista paginada de 12 con filtros `categoria`, `marca` y `q` combinables · la tienda solo ve activos · 404 para un producto inexistente · CRUD solo ADMIN, `DELETE` pone `activo: false` |
-| `inventario` | Stock por producto · entrada suma disponible · ajuste exige motivo y no deja disponible negativo (400) · cada cambio agrega un movimiento |
-| `pedidos` | Carrito por usuario del token, una línea por producto · checkout: venta PENDIENTE → reserva todo o nada (409 con el producto que falló, venta ANULADA) → comprobante (503 si `VITE_MOCK_FALLA_COMPROBANTE=true`, se libera y venta ANULADA) → venta CONFIRMADA y carrito vacío · `GET /pedidos` filtra por dueño salvo ADMIN · 403 si un cliente pide un pedido ajeno |
-| `comprobantes` | Numeración B001 / F001 correlativa · uno por venta · filtra por dueño salvo ADMIN · PDF devuelve un archivo de ejemplo · reporte suma los comprobantes del rango |
-
-El checkout toca stock, ventas y comprobantes a la vez. Como las tablas en memoria (`db/`) son compartidas, el handler de `pedidos` las modifica directamente. **En el mock no hay llamadas entre servicios.**
-
-### `src/app/main.jsx`
+## 7. Arranque: `src/app/main.jsx`
 
 ```jsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import './styles/fuentes.css';
+import './styles/tailwind.css';
 import './styles/tokens.css';
 import './styles/global.css';
 
-async function encenderMocks() {
-  const { worker, hayMocks } = await import('@/shared/mocks/browser');
-  if (hayMocks) await worker.start({ onUnhandledRequest: 'bypass' });
-}
+// La web ya no usa service workers. Si quedó registrado el de los mocks (MSW) de antes, se da de baja
+// para que no responda con datos simulados viejos.
+navigator.serviceWorker?.getRegistrations().then((registros) => registros.forEach((r) => r.unregister()));
 
-const mocks = import.meta.env.DEV ? encenderMocks() : Promise.resolve();
-
-mocks.then(() => {
-  createRoot(document.getElementById('root')).render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
-});
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
 ```
 
-- `import.meta.env.DEV` es `false` en `npm run build`, así que **los mocks nunca llegan a producción** (Vite descarta el import dinámico).
-- `onUnhandledRequest: 'bypass'`: lo que no tiene mock pasa al proxy y llega al gateway. Por eso se puede tener `catalogo` real y `pedidos` simulado al mismo tiempo.
+Hasta el 19/10/2026 la web tenía mocks con MSW (`src/shared/mocks/`) para construir las vistas antes que el backend. Se eliminaron: todos los endpoints existen y la web siempre habla con el gateway.
 
 ---
 
@@ -1211,9 +1015,7 @@ Cada error llega como `ApiError` con `status`, `mensaje` y `detalles`. Quién lo
 4. **Las respuestas del backend se adaptan en `entities/*/model/adaptadores.js`.** Si el backend cambia un campo, se arregla ahí y no en cada componente.
 5. **Los montos de ventas y comprobantes se leen del backend**, nunca se recalculan. `igv.js` es solo para la vista previa del carrito.
 6. **El id del usuario nunca se manda en el cuerpo.** El backend lo saca del token.
-7. **Los mocks imitan al backend, no al revés.** Si un mock y el backend reales difieren, se corrige el mock.
-8. **Un servicio sale de `VITE_MOCKS` cuando su endpoint está ✅** en la tabla de la sección 6 y responde igual que el mock.
-9. **Nombres en español**, como el backend: `listarProductos`, `useVenta`, `BotonAgregarAlCarrito`. Componentes en `PascalCase.jsx`, el resto en `camelCase.js`, carpetas en `kebab-case`.
+7. **Nombres en español**, como el backend: `listarProductos`, `useVenta`, `BotonAgregarAlCarrito`. Componentes en `PascalCase.jsx`, el resto en `camelCase.js`, carpetas en `kebab-case`.
 
 ---
 
@@ -1229,5 +1031,6 @@ Cada error llega como `ApiError` con `status`, `mensaje` y `detalles`. Quién lo
 | 6 | Mocks de `pedidos` y `comprobantes` + `entities/carrito`, `venta`, `comprobante` + features de carrito y compra + páginas 4.6 a 4.14 | Compra completa con boleta; con `VITE_MOCK_FALLA_COMPROBANTE=true`, la vista 4.9 | ✅ |
 | 7 | `widgets/admin-layout` + páginas 5.1 a 5.10 | El admin gestiona productos, stock, ventas y usuarios en el mock | ✅ |
 | 8 | Conectar el backend real, un servicio a la vez: quitarlo de `VITE_MOCKS` en `.env.development.local` y levantar gateway + Eureka + ese servicio | La misma pantalla funciona igual contra Aiven | ✅ |
+| 9 | Eliminar los mocks (MSW, `shared/mocks/`, `public/mockServiceWorker.js`) | La web solo habla con el backend real | ✅ 19/10/2026 |
 
 Para el paso 8, el backend se levanta como dice [`ARRANQUE_PROYECTO.md`](../../DSW_II_PROYECTO/ARRANQUE_PROYECTO.md). Con `EXIGIR_TOKEN=false` (desarrollo) el gateway deja pasar peticiones sin token: para probar los 401 y 403 reales hay que levantarlo con `EXIGIR_TOKEN=true`.

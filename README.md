@@ -14,31 +14,10 @@ npm run dev        # http://localhost:5173
 
 | Comando | Para qué |
 |---|---|
-| `npm run dev` | App en desarrollo contra el backend real (gateway en `localhost:8080`); con mocks si se define `VITE_MOCKS` |
-| `npm run build` | Genera `dist/` (sin mocks) |
+| `npm run dev` | App en desarrollo contra el backend real (gateway en `localhost:8080`) |
+| `npm run build` | Genera `dist/` |
 | `npm run preview` | Sirve `dist/` |
 | `npm run lint` | oxlint |
-
-## Usuarios de los mocks
-
-Solo existen en el navegador (`src/shared/mocks/db/usuarios.js`):
-
-| Correo | Contraseña | Rol | Para probar |
-|---|---|---|---|
-| `ana.torres@gmail.com` | `cliente123` | CLIENTE | Compra completa; empieza con el carrito de la vista 4.6 (incluye un producto agotado) |
-| `admin@intiguard.pe` | `admin1234` | ADMIN | Panel de administración |
-| `luis.ramos@hotmail.com` | `cliente123` | CLIENTE | Cuenta bloqueada por intentos (10 min desde que carga la página) |
-| `pedro.quispe@gmail.com` | `cliente123` | CLIENTE | Cuenta inactiva (el login responde "credenciales inválidas") |
-
-El 5.º intento fallido bloquea la cuenta 15 minutos. **Recargar la página reinicia todos los datos**
-(ventas, stock, usuarios): para probar un flujo largo, navegar dentro de la app sin recargar.
-
-Los datos semilla son los de `PROTOTIPO_WEB.md` §3 más un historial generado con semilla fija
-(ventas desde el 01/09/2026 hasta hoy, con sus comprobantes y movimientos de stock), para que el
-resumen, los reportes y las tablas del panel tengan datos. Las imágenes de producto están en `public/productos/`.
-
-Para probar la vista 4.9 "No pudimos completar tu compra", poner `VITE_MOCK_FALLA_COMPROBANTE=true`
-en `.env.development.local` y reiniciar `npm run dev`.
 
 ## Publicar en Render
 
@@ -50,12 +29,9 @@ gateway, corrige `.env.production` aquí y `CORS_ORIGENES` en el backend, y vuel
 El backend en el plan gratuito se duerme tras 15 min sin tráfico: antes de una demo, correr
 `bash pruebas/despertar-render.sh` en el repositorio del backend (o abrir la web y esperar ~1 min).
 
-Para publicar una **demo solo con datos simulados** (sin backend), agregar en Render `VITE_MOCKS_EN_BUILD=true`
-y volver a desplegar: los mocks se encienden también en el build.
-
 ## Backend real
 
-Es lo que usa `npm run dev` por defecto (`VITE_MOCKS=` vacío en `.env.development`). Todo `/api` pasa por el proxy
+La web siempre habla con el backend real: no hay datos simulados. En desarrollo, todo `/api` pasa por el proxy
 de Vite al gateway (`/api` → `http://localhost:8080`, sin el prefijo), así que el navegador ve un solo origen.
 
 1. Levantar el backend (repositorio `DSW_II_PROYECTO`, ver su `ARRANQUE_PROYECTO.md`): Eureka, gateway y los cinco servicios.
@@ -63,20 +39,13 @@ de Vite al gateway (`/api` → `http://localhost:8080`, sin el prefijo), así qu
 3. Los usuarios son los de Aiven: el administrador sale de `ADMIN_CORREO` / `ADMIN_CLAVE` del `.env` del backend, y
    cualquiera puede crear una cuenta de cliente en `/registro`.
 
-Para trabajar **sin backend**, crear `.env.development.local` (no se sube) con los servicios que se quieran simular:
-
-```properties
-VITE_MOCKS=auth,catalogo,inventario,pedidos,comprobantes
-```
-
-Todos los endpoints que antes eran propuestas ya existen en el backend (18/10/2026) y responden igual que los mocks.
-Se comprobó el recorrido completo a través del proxy de Vite contra Aiven: catálogo con filtros, registro, perfil,
+Todos los endpoints que antes eran propuestas ya existen en el backend (18/10/2026). Se comprobó el recorrido completo a través del proxy de Vite contra Aiven: catálogo con filtros, registro, perfil,
 carrito, checkout con boleta y factura, stock insuficiente (409), comprobantes caídos (503 con el stock liberado),
 comprobantes y PDF, reportes y el panel con los 206 productos reales.
 
 ## Estado
 
-Todas las vistas de `PROTOTIPO_WEB.md` están construidas, probadas contra los mocks y conectadas al backend real.
+Todas las vistas de `PROTOTIPO_WEB.md` están construidas y conectadas al backend real. Los mocks (MSW) se eliminaron el 19/10/2026.
 
 | Vista | Diseño |
 |---|---|

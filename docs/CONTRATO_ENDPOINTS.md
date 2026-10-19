@@ -2,7 +2,7 @@
 
 Todo lo que el cliente web necesita del backend: ruta, quién la puede llamar, qué envía el front, qué debe responder el backend y qué vistas la usan. Cada atributo trae una línea con **para qué lo usa el front**.
 
-- Fuente: los handlers de `src/shared/mocks/handlers/` (responden exactamente esto) y `src/shared/api/endpoints.js` (las rutas).
+- Fuente: el backend (los DTO de cada microservicio) y `src/shared/api/endpoints.js` (las rutas). Hasta el 19/10/2026 también los mocks de la web, ya eliminados.
 - Detalle de arquitectura y responsables de cada propuesta: [ARQUITECTURA_WEB.md](ARQUITECTURA_WEB.md) §6.
 - Diseño de cada vista (los números 4.x y 5.x): [PROTOTIPO_WEB.md](PROTOTIPO_WEB.md).
 
