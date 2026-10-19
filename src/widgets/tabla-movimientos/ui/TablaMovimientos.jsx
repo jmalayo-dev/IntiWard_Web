@@ -114,7 +114,7 @@ export function TablaMovimientos({ movimientos = [], productos = [], idProducto:
         columnas={columnas}
         filas={vista.items}
         vacio={<EstadoVacio icono="flechas" titulo="No hay movimientos" texto="Prueba con otro producto, tipo o rango de fechas." />}
-        pie={<Paginacion {...vista} numeros alCambiar={setPagina} />}
+        pie={<Paginacion {...vista} unidad={['movimiento', 'movimientos']} alCambiar={setPagina} />}
       />
     </div>
   );

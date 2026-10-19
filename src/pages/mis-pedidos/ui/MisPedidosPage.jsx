@@ -4,8 +4,8 @@ import { TIPO_COMPROBANTE, useComprobantes } from '@/entities/comprobante';
 import { ProductoImagen, useProducto } from '@/entities/producto';
 import { EstadoVentaInsignia, useVentas } from '@/entities/venta';
 import { RUTAS } from '@/shared/config';
-import { formatoFecha, formatoMoneda, formatoPedido, hoyIso, sumarDias, useTitulo } from '@/shared/lib';
-import { Cargando, EncabezadoPagina, EstadoVacio, MensajeError, Pestanas } from '@/shared/ui';
+import { formatoFecha, formatoMoneda, formatoPedido, hoyIso, paginarLista, sumarDias, useTitulo } from '@/shared/lib';
+import { Cargando, EncabezadoPagina, EstadoVacio, MensajeError, Paginacion, Pestanas } from '@/shared/ui';
 import styles from './MisPedidosPage.module.css';
 
 const PERIODOS = [
@@ -27,11 +27,22 @@ export function MisPedidosPage() {
   const { data: comprobantes = [] } = useComprobantes();
   const [estado, setEstado] = useState('');
   const [periodo, setPeriodo] = useState('90');
+  const [pagina, setPagina] = useState(0);
 
   const comprobanteDe = useMemo(() => Object.fromEntries(comprobantes.map((c) => [c.idVenta, c])), [comprobantes]);
   const enPeriodo = (ventas ?? []).filter((v) => !periodo || v.fechaVenta.slice(0, 10) >= sumarDias(hoyIso(), -Number(periodo)));
   const cuenta = (e) => enPeriodo.filter((v) => v.estado === e).length;
   const lista = enPeriodo.filter((v) => !estado || v.estado === estado);
+  const vista = paginarLista(lista, pagina, 10);
+  // Un filtro nuevo vuelve a la primera página
+  const filtrarEstado = (e) => {
+    setEstado(e);
+    setPagina(0);
+  };
+  const filtrarPeriodo = (p) => {
+    setPeriodo(p);
+    setPagina(0);
+  };
 
   if (error) return <MensajeError error={error} alReintentar={refetch} />;
 
@@ -60,7 +71,7 @@ export function MisPedidosPage() {
               variante="pildora"
               etiqueta="Estado del pedido"
               valor={estado}
-              alCambiar={setEstado}
+              alCambiar={filtrarEstado}
               opciones={[
                 { valor: '', texto: `Todos (${enPeriodo.length})` },
                 { valor: 'CONFIRMADA', texto: `Confirmados (${cuenta('CONFIRMADA')})` },
@@ -68,7 +79,7 @@ export function MisPedidosPage() {
                 ...(cuenta('PENDIENTE') ? [{ valor: 'PENDIENTE', texto: `Pendientes (${cuenta('PENDIENTE')})` }] : []),
               ]}
             />
-            <select className={styles.periodo} value={periodo} onChange={(e) => setPeriodo(e.target.value)} aria-label="Período">
+            <select className={styles.periodo} value={periodo} onChange={(e) => filtrarPeriodo(e.target.value)} aria-label="Período">
               {PERIODOS.map((p) => (
                 <option key={p.valor} value={p.valor}>
                   {p.texto}
@@ -82,47 +93,50 @@ export function MisPedidosPage() {
               <EstadoVacio icono="bolsa" titulo="No hay pedidos en este período" texto="Prueba con otro estado o un período más largo." />
             </div>
           ) : (
-            <ul className={styles.lista}>
-              {lista.map((v) => {
-                const comprobante = comprobanteDe[v.id];
-                return (
-                  <li key={v.id} className={styles.pedido}>
-                    <div className={styles.numero}>
-                      <strong>Pedido {formatoPedido(v.id)}</strong>
-                      <span>{formatoFecha(v.fechaVenta)}</span>
-                    </div>
-                    <div className={styles.productos}>
-                      <span className={styles.miniaturas}>
-                        {v.detalles.slice(0, 3).map((d) => (
-                          <Miniatura key={d.idProducto} idProducto={d.idProducto} nombre={d.nombreProducto} />
-                        ))}
-                      </span>
-                      {v.detalles.length} {v.detalles.length === 1 ? 'producto' : 'productos'}
-                    </div>
-                    <div className={styles.estado}>
-                      <EstadoVentaInsignia estado={v.estado} punto />
-                    </div>
-                    <div className={styles.comprobante}>
-                      <span className={styles.rotulo}>Comprobante</span>
-                      {comprobante ? (
-                        <span className={styles.mono}>
-                          {TIPO_COMPROBANTE[comprobante.tipo]?.texto} {comprobante.numero}
+            <>
+              <ul className={styles.lista}>
+                {vista.items.map((v) => {
+                  const comprobante = comprobanteDe[v.id];
+                  return (
+                    <li key={v.id} className={styles.pedido}>
+                      <div className={styles.numero}>
+                        <strong>Pedido {formatoPedido(v.id)}</strong>
+                        <span>{formatoFecha(v.fechaVenta)}</span>
+                      </div>
+                      <div className={styles.productos}>
+                        <span className={styles.miniaturas}>
+                          {v.detalles.slice(0, 3).map((d) => (
+                            <Miniatura key={d.idProducto} idProducto={d.idProducto} nombre={d.nombreProducto} />
+                          ))}
                         </span>
-                      ) : (
-                        <em className={styles.sin}>{v.estado === 'PENDIENTE' ? 'En proceso' : 'Sin comprobante'}</em>
-                      )}
-                    </div>
-                    <div className={styles.total}>
-                      <span className={styles.rotulo}>Total</span>
-                      <strong>{formatoMoneda(v.total)}</strong>
-                    </div>
-                    <Link to={RUTAS.miPedido(v.id)} className={styles.botonSecundario}>
-                      Ver detalle
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+                        {v.detalles.length} {v.detalles.length === 1 ? 'producto' : 'productos'}
+                      </div>
+                      <div className={styles.estado}>
+                        <EstadoVentaInsignia estado={v.estado} punto />
+                      </div>
+                      <div className={styles.comprobante}>
+                        <span className={styles.rotulo}>Comprobante</span>
+                        {comprobante ? (
+                          <span className={styles.mono}>
+                            {TIPO_COMPROBANTE[comprobante.tipo]?.texto} {comprobante.numero}
+                          </span>
+                        ) : (
+                          <em className={styles.sin}>{v.estado === 'PENDIENTE' ? 'En proceso' : 'Sin comprobante'}</em>
+                        )}
+                      </div>
+                      <div className={styles.total}>
+                        <span className={styles.rotulo}>Total</span>
+                        <strong>{formatoMoneda(v.total)}</strong>
+                      </div>
+                      <Link to={RUTAS.miPedido(v.id)} className={styles.botonSecundario}>
+                        Ver detalle
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+              <Paginacion {...vista} unidad={['pedido', 'pedidos']} alCambiar={setPagina} />
+            </>
           )}
         </>
       )}

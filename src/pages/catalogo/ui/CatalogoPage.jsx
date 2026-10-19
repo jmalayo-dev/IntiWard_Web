@@ -86,7 +86,7 @@ export function CatalogoPage() {
               <GrillaProductos productos={data?.items} cargando={isLoading} columnas={3} />
             </div>
           )}
-          {data && data.totalPaginas > 1 && <Paginacion {...data} centrada alCambiar={cambiarPagina} />}
+          {data && <Paginacion {...data} unidad={['producto', 'productos']} alCambiar={cambiarPagina} />}
         </section>
       </div>
     </div>

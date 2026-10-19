@@ -133,7 +133,7 @@ export function AdminStockPage() {
         columnas={columnas}
         filas={vista.items}
         vacio={!isLoading && <EstadoVacio icono="almacen" titulo="No hay productos con ese filtro" />}
-        pie={<Paginacion {...vista} numeros alCambiar={setPagina} />}
+        pie={<Paginacion {...vista} unidad={['producto', 'productos']} alCambiar={setPagina} />}
       />
 
       <ModalEntradaStock

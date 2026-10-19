@@ -99,7 +99,7 @@ export function AdminUsuariosPage() {
         filas={vista.items}
         claseFila={(u) => (u.activo ? undefined : 'atenuada')}
         vacio={!isLoading && <EstadoVacio icono="usuarios" titulo="No hay usuarios con esos filtros" />}
-        pie={<Paginacion {...vista} numeros alCambiar={setPagina} />}
+        pie={<Paginacion {...vista} unidad={['usuario', 'usuarios']} alCambiar={setPagina} />}
       />
       <ModalUsuario
         abierto={Boolean(modal)}

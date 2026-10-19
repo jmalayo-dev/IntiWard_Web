@@ -131,7 +131,7 @@ export function AdminComprobantesPage() {
         alClicFila={setElegido}
         claseFila={(c) => (c.id === elegido?.id ? 'seleccionada' : undefined)}
         vacio={!isLoading && <EstadoVacio icono="documento" titulo="No hay comprobantes con esos filtros" />}
-        pie={<Paginacion {...vista} numeros alCambiar={setPagina} />}
+        pie={<Paginacion {...vista} unidad={['comprobante', 'comprobantes']} alCambiar={setPagina} />}
       />
 
       <PanelLateral

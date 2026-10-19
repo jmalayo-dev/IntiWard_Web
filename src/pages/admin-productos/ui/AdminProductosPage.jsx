@@ -143,7 +143,7 @@ export function AdminProductosPage() {
           vacio={
             !isLoading && <EstadoVacio icono="caja" titulo="No hay productos con esos filtros" texto="Prueba con otro nombre, categoría o marca." />
           }
-          pie={data && <Paginacion {...data} numeros alCambiar={setPagina} />}
+          pie={data && <Paginacion {...data} unidad={['producto', 'productos']} alCambiar={setPagina} />}
         />
       )}
     </div>

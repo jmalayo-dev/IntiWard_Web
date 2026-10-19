@@ -140,7 +140,7 @@ export function AdminVentasPage() {
         columnas={columnas}
         filas={vista.items}
         vacio={!isLoading && <EstadoVacio icono="carrito" titulo="No hay ventas con esos filtros" />}
-        pie={<Paginacion {...vista} numeros alCambiar={setPagina} />}
+        pie={<Paginacion {...vista} unidad={['venta', 'ventas']} alCambiar={setPagina} />}
       />
     </div>
   );
