@@ -42,7 +42,7 @@ en `.env.development.local` y reiniciar `npm run dev`.
 
 ## Publicar en Render
 
-`render.yaml` crea un **Static Site** gratuito llamado `intiguard-web` (Dashboard → **New → Blueprint** → este repositorio).
+`render.yaml` crea un **Static Site** gratuito llamado `intiward-web` (`https://intiward-web.onrender.com`) (Dashboard → **New → Blueprint** → este repositorio).
 El build usa `.env.production`, que apunta al gateway publicado: `VITE_API_URL=https://intiguard-gateway.onrender.com`.
 El gateway acepta ese dominio por CORS (`CORS_ORIGENES` en el backend). Si Render le asigna otra URL a la web o al
 gateway, corrige `.env.production` aquí y `CORS_ORIGENES` en el backend, y vuelve a desplegar.

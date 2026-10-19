@@ -2,7 +2,7 @@
 # Static Site gratuito: no se duerme. Llama al gateway del backend (VITE_API_URL en .env.production).
 services:
   - type: web
-    name: intiguard-web
+    name: intiward-web
     runtime: static
     branch: main
     buildCommand: npm ci && npm run build
