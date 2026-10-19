@@ -45,14 +45,14 @@
   color: var(--color-texto-secundario);
 }
 
-/* Marca sin stock: tachada, en gris y sin poder marcarse */
-.agotada span {
+/* Marca sin productos: tachada, en gris y sin poder marcarse */
+.vacia span {
   color: var(--color-deshabilitado);
   text-decoration: line-through;
 }
 
-.agotada label,
-.agotada input:disabled {
+.vacia label,
+.vacia input:disabled {
   cursor: not-allowed;
 }
 
