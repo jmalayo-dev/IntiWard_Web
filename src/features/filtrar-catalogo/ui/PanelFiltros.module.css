@@ -45,6 +45,17 @@
   color: var(--color-texto-secundario);
 }
 
+/* Marca sin stock: tachada, en gris y sin poder marcarse */
+.agotada span {
+  color: var(--color-deshabilitado);
+  text-decoration: line-through;
+}
+
+.agotada label,
+.agotada input:disabled {
+  cursor: not-allowed;
+}
+
 .precios {
   display: grid;
   grid-template-columns: 1fr 1fr;

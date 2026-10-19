@@ -460,6 +460,8 @@ Pone `activo: false`. Responde **204**. **404**.
 
 Responde **200**: **Marca[]** / **Categoría[]**. El público solo recibe las activas; el ADMIN recibe todas.
 
+Cada una trae `productos` (activos). Las marcas traen además `conStock`: cuántos de esos productos tienen unidades disponibles (ms-catalogo se lo pregunta a ms-inventario). Con `conStock: 0` el filtro del catálogo muestra la marca tachada y no deja marcarla. Si ms-inventario no responde, `conStock` llega `null` y no se bloquea ninguna marca.
+
 **Vistas:**
 - 4.2 Catálogo (filtros con contador).
 - Buscador del encabezado (sugerencias).

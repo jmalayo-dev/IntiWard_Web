@@ -30,7 +30,8 @@ function CampoPrecio({ etiqueta, valor, alAplicar }) {
 
 /**
  * Columna de filtros de la vista 4.2: categoría, marca, precio y disponibilidad.
- * categorias / marcas: [{ id, nombre, productos }]
+ * categorias / marcas: [{ id, nombre, productos }]. Las marcas traen además conStock: con 0 salen tachadas y no se
+ * pueden marcar (si ya estaba marcada, se puede desmarcar). Si conStock no viene (inventario sin responder), no se bloquea.
  */
 export function PanelFiltros({ filtros, cambiarFiltro, alternarMarca, limpiar, categorias = [], marcas = [] }) {
   return (
@@ -53,9 +54,21 @@ export function PanelFiltros({ filtros, cambiarFiltro, alternarMarca, limpiar, c
 
       <fieldset className={styles.grupo}>
         <legend className={styles.titulo}>Marca</legend>
-        {marcas.map((m) => (
-          <Casilla key={m.id} etiqueta={m.nombre} checked={filtros.marca.includes(m.nombre)} onChange={() => alternarMarca(m.nombre)} className={styles.casilla} />
-        ))}
+        {marcas.map((m) => {
+          const marcada = filtros.marca.includes(m.nombre);
+          const agotada = m.conStock === 0;
+          return (
+            <Casilla
+              key={m.id}
+              etiqueta={m.nombre}
+              checked={marcada}
+              disabled={agotada && !marcada}
+              title={agotada ? 'Sin stock por ahora' : undefined}
+              onChange={() => alternarMarca(m.nombre)}
+              className={`${styles.casilla} ${agotada ? styles.agotada : ''}`}
+            />
+          );
+        })}
       </fieldset>
 
       <fieldset className={styles.grupo}>

@@ -185,7 +185,9 @@ export const catalogo = [
   http.get(ruta(ENDPOINTS.marcas.lista), async ({ request }) => {
     await latencia();
     const lista = esAdmin(request) ? marcas : marcas.filter((m) => m.activo);
-    return HttpResponse.json(lista.map(conConteo('idMarca')));
+    // Como ms-catalogo: conStock = productos activos de la marca con unidades disponibles
+    const conStock = (m) => productos.filter((p) => p.idMarca === m.id && p.activo && disponibleDe(p.id) > 0).length;
+    return HttpResponse.json(lista.map(conConteo('idMarca')).map((m) => ({ ...m, conStock: conStock(m) })));
   }),
 
   http.get(ruta(ENDPOINTS.categorias.lista), async ({ request }) => {
