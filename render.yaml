@@ -1,0 +1,17 @@
+# Blueprint de Render para la web (Dashboard → New → Blueprint, eligiendo este repositorio).
+# Static Site gratuito: no se duerme. Llama al gateway del backend (VITE_API_URL en .env.production).
+services:
+  - type: web
+    name: intiguard-web
+    runtime: static
+    branch: main
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+    routes:
+      # React Router: /catalogo, /admin… no deben dar 404 al recargar
+      - type: rewrite
+        source: /*
+        destination: /index.html

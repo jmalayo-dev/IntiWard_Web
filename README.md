@@ -42,27 +42,16 @@ en `.env.development.local` y reiniciar `npm run dev`.
 
 ## Publicar en Render
 
-El build normal (`npm run build`) **no incluye los mocks** y tampoco hay proxy de Vite: `/api` tiene que llegar a un
-backend real. Para publicar una **demo con datos simulados**, los mocks se encienden también en el build con una variable.
+`render.yaml` crea un **Static Site** gratuito llamado `intiguard-web` (Dashboard → **New → Blueprint** → este repositorio).
+El build usa `.env.production`, que apunta al gateway publicado: `VITE_API_URL=https://intiguard-gateway.onrender.com`.
+El gateway acepta ese dominio por CORS (`CORS_ORIGENES` en el backend). Si Render le asigna otra URL a la web o al
+gateway, corrige `.env.production` aquí y `CORS_ORIGENES` en el backend, y vuelve a desplegar.
 
-En Render, como *Static Site*:
+El backend en el plan gratuito se duerme tras 15 min sin tráfico: antes de una demo, correr
+`bash pruebas/despertar-render.sh` en el repositorio del backend (o abrir la web y esperar ~1 min).
 
-| Opción | Valor |
-|---|---|
-| Build Command | `npm ci && npm run build` |
-| Publish Directory | `dist` |
-| Environment → `NODE_VERSION` | `22` |
-| Environment → `VITE_MOCKS_EN_BUILD` | `true` (demo con los cinco servicios simulados) |
-| Redirects/Rewrites | Source `/*` → Destination `/index.html`, Action **Rewrite** (para que `/catalogo`, `/admin`… no den 404 al recargar) |
-
-Las variables `VITE_*` se leen **al hacer el build**: después de cambiarlas en Render hay que volver a desplegar.
-Como en local, cada visitante tiene sus propios datos simulados y se reinician al recargar.
-
-**Cuando el backend esté publicado**, quitar `VITE_MOCKS_EN_BUILD` y elegir una de estas dos formas:
-
-- Una regla de Render antes de la anterior: Source `/api/*` → Destination `https://<gateway>/:splat`, Action **Rewrite**.
-  El navegador sigue viendo un solo dominio y no hace falta CORS.
-- O `VITE_API_URL=https://<gateway>` (sin `/api`), con CORS habilitado en el gateway para el dominio de Render.
+Para publicar una **demo solo con datos simulados** (sin backend), agregar en Render `VITE_MOCKS_EN_BUILD=true`
+y volver a desplegar: los mocks se encienden también en el build.
 
 ## Backend real
 
