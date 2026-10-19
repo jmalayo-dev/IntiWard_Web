@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCategorias } from '@/entities/categoria';
 import { useMarcas } from '@/entities/marca';
-import { listarProductosParaExportar, ProductoImagen, useProductos } from '@/entities/producto';
+import { listarProductosParaExportar, ProductoImagen, useProductos, TAMANO_TODOS } from '@/entities/producto';
 import { StockInsignia, useStocks } from '@/entities/stock';
 import { InterruptorProducto } from '@/features/desactivar-producto';
 import { RUTAS } from '@/shared/config';
@@ -40,7 +40,7 @@ export function AdminProductosPage() {
   };
 
   const exportar = async () => {
-    const { items: lista } = await listarProductosParaExportar({ ...filtros, page: 0, size: 1000 });
+    const { items: lista } = await listarProductosParaExportar({ ...filtros, page: 0, size: TAMANO_TODOS });
     descargarCsv('productos.csv', [
       { titulo: 'Producto', valor: (p) => p.nombre },
       { titulo: 'Marca', valor: (p) => p.marca },

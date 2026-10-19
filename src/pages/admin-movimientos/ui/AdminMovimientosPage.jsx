@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { useMovimientos } from '@/entities/movimiento';
-import { useProductos } from '@/entities/producto';
+import { useProductos, TAMANO_TODOS } from '@/entities/producto';
 import { useTitulo } from '@/shared/lib';
 import { Cargando, EncabezadoPagina, MensajeError } from '@/shared/ui';
 import { TablaMovimientos } from '@/widgets/tabla-movimientos';
@@ -10,7 +10,7 @@ export function AdminMovimientosPage() {
   useTitulo('Movimientos de stock');
   const [params, setParams] = useSearchParams();
   const { data: movimientos, isLoading, error, refetch } = useMovimientos();
-  const { data: productos } = useProductos({ size: 100, inactivos: true });
+  const { data: productos } = useProductos({ size: TAMANO_TODOS, inactivos: true });
 
   return (
     <div>

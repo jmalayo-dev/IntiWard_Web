@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ProductoImagen, useProductos } from '@/entities/producto';
+import { ProductoImagen, useProductos, TAMANO_TODOS } from '@/entities/producto';
 import { StockInsignia, UMBRAL_ULTIMAS_UNIDADES, useStocks } from '@/entities/stock';
 import { ModalAjusteStock } from '@/features/ajustar-stock';
 import { ModalEntradaStock } from '@/features/registrar-entrada-stock';
@@ -22,7 +22,7 @@ const FILTROS = [
 export function AdminStockPage() {
   useTitulo('Stock');
   const location = useLocation();
-  const { data: productos, error, refetch } = useProductos({ size: 100 });
+  const { data: productos, error, refetch } = useProductos({ size: TAMANO_TODOS });
   const { data: stock, isLoading } = useStocks();
   const [texto, setTexto] = useState('');
   const [filtro, setFiltro] = useState(location.state?.filtro ?? 'todos');

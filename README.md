@@ -14,7 +14,7 @@ npm run dev        # http://localhost:5173
 
 | Comando | Para qué |
 |---|---|
-| `npm run dev` | App en desarrollo, con los mocks de `VITE_MOCKS` |
+| `npm run dev` | App en desarrollo contra el backend real (gateway en `localhost:8080`); con mocks si se define `VITE_MOCKS` |
 | `npm run build` | Genera `dist/` (sin mocks) |
 | `npm run preview` | Sirve `dist/` |
 | `npm run lint` | oxlint |
@@ -66,33 +66,28 @@ Como en local, cada visitante tiene sus propios datos simulados y se reinician a
 
 ## Backend real
 
-Crear `.env.development.local` (no se sube) y dejar en `VITE_MOCKS` solo los servicios que sigan simulados:
+Es lo que usa `npm run dev` por defecto (`VITE_MOCKS=` vacío en `.env.development`). Todo `/api` pasa por el proxy
+de Vite al gateway (`/api` → `http://localhost:8080`, sin el prefijo), así que el navegador ve un solo origen.
+
+1. Levantar el backend (repositorio `DSW_II_PROYECTO`, ver su `ARRANQUE_PROYECTO.md`): Eureka, gateway y los cinco servicios.
+2. `npm run dev` y entrar a `http://localhost:5173`.
+3. Los usuarios son los de Aiven: el administrador sale de `ADMIN_CORREO` / `ADMIN_CLAVE` del `.env` del backend, y
+   cualquiera puede crear una cuenta de cliente en `/registro`.
+
+Para trabajar **sin backend**, crear `.env.development.local` (no se sube) con los servicios que se quieran simular:
 
 ```properties
-VITE_MOCKS=pedidos,comprobantes
+VITE_MOCKS=auth,catalogo,inventario,pedidos,comprobantes
 ```
 
-Lo que no tiene mock pasa por el proxy de Vite (`/api` → `http://localhost:8080`, sin el prefijo).
-
-### Lo que el front usa y el backend todavía no tiene (propuestas)
-
-Están en `src/shared/api/endpoints.js` y los responde el mock. Hay que pasárselos a cada responsable:
-
-| Servicio | Propuesta | Para qué vista |
-|---|---|---|
-| ms-auth | `POST /auth/registro` | 4.5 |
-| ms-auth | `GET` / `PUT /usuarios/me` (perfil propio, contraseña y foto) | 4.13 |
-| ms-auth | `bloqueadoHasta` y `ultimoAcceso` en `UsuarioResponse` | 5.10 |
-| ms-catalogo | `activo`, `idMarca`, `idCategoria` y `especificaciones` en el producto | 4.3, 5.2, 5.3 |
-| ms-catalogo | Filtros `marca` (varias, con coma), `precioMin`, `precioMax`, `conStock`, `sort` e `inactivos` | 4.2, 5.2 |
-| ms-catalogo | `POST /marcas`, `PUT /marcas/{id}`, `POST /categorias`, `PUT /categorias/{id}` y `productos` (cantidad) en cada una | 4.2, 5.4 |
-| ms-inventario | `GET /stock?ids=1,2,3` (y sin ids, todo) con `actualizadoEn` | 4.1–4.7, 5.5 |
-| ms-inventario | Tipos de movimiento `RESERVA`, `CONFIRMACION`, `LIBERACION` además de `ENTRADA` y `AJUSTE` | 5.6 |
-| ms-pedidos | `detalles` en `GET /pedidos` y `GET /pedidos/{id}`; `marca` en las líneas del carrito; DNI opcional en boleta | 4.6–4.11, 5.7 |
+Todos los endpoints que antes eran propuestas ya existen en el backend (18/10/2026) y responden igual que los mocks.
+Se comprobó el recorrido completo a través del proxy de Vite contra Aiven: catálogo con filtros, registro, perfil,
+carrito, checkout con boleta y factura, stock insuficiente (409), comprobantes caídos (503 con el stock liberado),
+comprobantes y PDF, reportes y el panel con los 206 productos reales.
 
 ## Estado
 
-Todas las vistas de `PROTOTIPO_WEB.md` están construidas y probadas contra los mocks.
+Todas las vistas de `PROTOTIPO_WEB.md` están construidas, probadas contra los mocks y conectadas al backend real.
 
 | Vista | Diseño |
 |---|---|

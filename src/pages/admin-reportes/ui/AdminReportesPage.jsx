@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { TIPO_COMPROBANTE, useReporte } from '@/entities/comprobante';
-import { useProductos } from '@/entities/producto';
+import { useProductos, TAMANO_TODOS } from '@/entities/producto';
 import { useVentas } from '@/entities/venta';
 import { useFiltroReporte } from '@/features/filtrar-reporte';
 import { descargarCsv, formatoFecha, formatoMoneda, useTitulo } from '@/shared/lib';
@@ -18,7 +18,7 @@ export function AdminReportesPage() {
   const { data: reporte, isLoading, error, refetch } = useReporte(rango);
   const { data: reporteAnterior } = useReporte(anterior);
   const { data: ventas = [] } = useVentas();
-  const { data: productos } = useProductos({ size: 100, inactivos: true });
+  const { data: productos } = useProductos({ size: TAMANO_TODOS, inactivos: true });
 
   const enRango = useMemo(
     () => ventas.filter((v) => v.fechaVenta.slice(0, 10) >= rango.desde && v.fechaVenta.slice(0, 10) <= rango.hasta),

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useMatches, useNavigate, useParams } from 'react-router-dom';
-import { useProductos } from '@/entities/producto';
+import { useProductos, TAMANO_TODOS } from '@/entities/producto';
 import { useSesion } from '@/entities/sesion';
 import { useStocks } from '@/entities/stock';
 import { AvatarIniciales, usePerfil } from '@/entities/usuario';
@@ -70,7 +70,7 @@ export function AdminLayout() {
   const { usuario } = useSesion();
   const { data: perfil } = usePerfil({ habilitado: Boolean(usuario) });
   const { data: stock } = useStocks();
-  const { data: productos } = useProductos({ size: 100 });
+  const { data: productos } = useProductos({ size: TAMANO_TODOS });
   const cerrarSesion = useLogout({ destino: RUTAS.login });
   const navigate = useNavigate();
   const location = useLocation();

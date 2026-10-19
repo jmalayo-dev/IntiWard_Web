@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TIPO_COMPROBANTE, useComprobantes } from '@/entities/comprobante';
-import { useProductos } from '@/entities/producto';
+import { useProductos, TAMANO_TODOS } from '@/entities/producto';
 import { useStocks } from '@/entities/stock';
 import { useUsuarios } from '@/entities/usuario';
 import { EstadoVentaInsignia, useVentas } from '@/entities/venta';
@@ -37,7 +37,7 @@ export function AdminResumenPage() {
   const { data: ventas = [], error, refetch } = useVentas();
   const { data: comprobantes = [] } = useComprobantes();
   const { data: stock } = useStocks();
-  const { data: productos } = useProductos({ size: 100 });
+  const { data: productos } = useProductos({ size: TAMANO_TODOS });
   const { data: usuarios = [] } = useUsuarios();
 
   const hoy = hoyIso();
